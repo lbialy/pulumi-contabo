@@ -7,13 +7,12 @@ Method | HTTP request | Description
 [**CreateUser**](UsersApi.md#CreateUser) | **Post** /v1/users | Create a new user
 [**DeleteUser**](UsersApi.md#DeleteUser) | **Delete** /v1/users/{userId} | Delete existing user by id
 [**GenerateClientSecret**](UsersApi.md#GenerateClientSecret) | **Put** /v1/users/client/secret | Generate new client secret
-[**GetObjectStorageCredentials**](UsersApi.md#GetObjectStorageCredentials) | **Get** /v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId} | Get S3 compatible object storage credentials
-[**ListObjectStorageCredentials**](UsersApi.md#ListObjectStorageCredentials) | **Get** /v1/users/{userId}/object-storages/credentials | Get list of S3 compatible object storage credentials for user
-[**RegenerateCredentials**](UsersApi.md#RegenerateCredentials) | **Patch** /v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId} | Regenerates secret key of specified user for the S3 compatible object storages
+[**GenerateSsoToken**](UsersApi.md#GenerateSsoToken) | **Post** /v1/users/sso-token | Generate one time SSO token
 [**ResendEmailVerification**](UsersApi.md#ResendEmailVerification) | **Post** /v1/users/{userId}/resend-email-verification | Resend email verification
 [**ResetPassword**](UsersApi.md#ResetPassword) | **Post** /v1/users/{userId}/reset-password | Send reset password email
 [**RetrieveUser**](UsersApi.md#RetrieveUser) | **Get** /v1/users/{userId} | Get specific user by id
 [**RetrieveUserClient**](UsersApi.md#RetrieveUserClient) | **Get** /v1/users/client | Get client
+[**RetrieveUserIsPasswordSet**](UsersApi.md#RetrieveUserIsPasswordSet) | **Get** /v1/users/is-password-set | Get user is password set status
 [**RetrieveUserList**](UsersApi.md#RetrieveUserList) | **Get** /v1/users | List users
 [**UpdateUser**](UsersApi.md#UpdateUser) | **Patch** /v1/users/{userId} | Update specific user by id
 
@@ -41,7 +40,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    createUserRequest := *openapiclient.NewCreateUserRequest("john.doe@example.com", false, false, "de") // CreateUserRequest | 
+    createUserRequest := *openapiclient.NewCreateUserRequest("John", "Doe", "john.doe@example.com", false, false, "de") // CreateUserRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -111,7 +110,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
+    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user.
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -130,7 +129,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**userId** | **string** | The identifier of the user | 
+**userId** | **string** | The identifier of the user. | 
 
 ### Other Parameters
 
@@ -229,91 +228,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## GetObjectStorageCredentials
+## GenerateSsoToken
 
-> FindCredentialResponse GetObjectStorageCredentials(ctx, userId, objectStorageId, credentialId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> FindSsoTokenResponse GenerateSsoToken(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
 
-Get S3 compatible object storage credentials
-
-
-
-### Example
-
-```go
-package main
-
-import (
-    "context"
-    "fmt"
-    "os"
-    openapiclient "./openapi"
-)
-
-func main() {
-    xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
-    objectStorageId := "d8417276-d2d9-43a9-a0a8-9a6fa6060246" // string | The identifier of the S3 object storage
-    credentialId := int64(12345) // int64 | The ID of the object storage credential
-    xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
-
-    configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.UsersApi.GetObjectStorageCredentials(context.Background(), userId, objectStorageId, credentialId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `UsersApi.GetObjectStorageCredentials``: %v\n", err)
-        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-    }
-    // response from `GetObjectStorageCredentials`: FindCredentialResponse
-    fmt.Fprintf(os.Stdout, "Response from `UsersApi.GetObjectStorageCredentials`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**userId** | **string** | The identifier of the user | 
-**objectStorageId** | **string** | The identifier of the S3 object storage | 
-**credentialId** | **int64** | The ID of the object storage credential | 
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiGetObjectStorageCredentialsRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
-
-
-
- **xTraceId** | **string** | Identifier to trace group of requests. | 
-
-### Return type
-
-[**FindCredentialResponse**](FindCredentialResponse.md)
-
-### Authorization
-
-[bearer](../README.md#bearer)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## ListObjectStorageCredentials
-
-> ListCredentialResponse ListObjectStorageCredentials(ctx, userId).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).ObjectStorageId(objectStorageId).Execute()
-
-Get list of S3 compatible object storage credentials for user
+Generate one time SSO token
 
 
 
@@ -331,131 +250,37 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
-    page := int64(1) // int64 | Number of page to be fetched. (optional)
-    size := int64(10) // int64 | Number of elements per page. (optional)
-    orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
-    objectStorageId := "d8417276-d2d9-43a9-a0a8-9a6fa6060246" // string | The identifier of the S3 object storage (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.UsersApi.ListObjectStorageCredentials(context.Background(), userId).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).ObjectStorageId(objectStorageId).Execute()
+    resp, r, err := api_client.UsersApi.GenerateSsoToken(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `UsersApi.ListObjectStorageCredentials``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `UsersApi.GenerateSsoToken``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListObjectStorageCredentials`: ListCredentialResponse
-    fmt.Fprintf(os.Stdout, "Response from `UsersApi.ListObjectStorageCredentials`: %v\n", resp)
+    // response from `GenerateSsoToken`: FindSsoTokenResponse
+    fmt.Fprintf(os.Stdout, "Response from `UsersApi.GenerateSsoToken`: %v\n", resp)
 }
 ```
 
 ### Path Parameters
 
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**userId** | **string** | The identifier of the user | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiListObjectStorageCredentialsRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGenerateSsoTokenRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
-
- **xTraceId** | **string** | Identifier to trace group of requests. | 
- **page** | **int64** | Number of page to be fetched. | 
- **size** | **int64** | Number of elements per page. | 
- **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
- **objectStorageId** | **string** | The identifier of the S3 object storage | 
-
-### Return type
-
-[**ListCredentialResponse**](ListCredentialResponse.md)
-
-### Authorization
-
-[bearer](../README.md#bearer)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## RegenerateCredentials
-
-> FindCredentialResponse RegenerateCredentials(ctx, userId, objectStorageId, credentialId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
-
-Regenerates secret key of specified user for the S3 compatible object storages
-
-
-
-### Example
-
-```go
-package main
-
-import (
-    "context"
-    "fmt"
-    "os"
-    openapiclient "./openapi"
-)
-
-func main() {
-    xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
-    objectStorageId := "d8417276-d2d9-43a9-a0a8-9a6fa6060246" // string | The identifier of the S3 object storage
-    credentialId := int64(12345) // int64 | The ID of the object storage credential
-    xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
-
-    configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.UsersApi.RegenerateCredentials(context.Background(), userId, objectStorageId, credentialId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `UsersApi.RegenerateCredentials``: %v\n", err)
-        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-    }
-    // response from `RegenerateCredentials`: FindCredentialResponse
-    fmt.Fprintf(os.Stdout, "Response from `UsersApi.RegenerateCredentials`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**userId** | **string** | The identifier of the user | 
-**objectStorageId** | **string** | The identifier of the S3 object storage | 
-**credentialId** | **int64** | The ID of the object storage credential | 
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiRegenerateCredentialsRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
-
-
-
  **xTraceId** | **string** | Identifier to trace group of requests. | 
 
 ### Return type
 
-[**FindCredentialResponse**](FindCredentialResponse.md)
+[**FindSsoTokenResponse**](FindSsoTokenResponse.md)
 
 ### Authorization
 
@@ -493,7 +318,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
+    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user.
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
     redirectUrl := "https://test.contabo.de" // string | The redirect url used for email verification (optional)
 
@@ -513,7 +338,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**userId** | **string** | The identifier of the user | 
+**userId** | **string** | The identifier of the user. | 
 
 ### Other Parameters
 
@@ -567,7 +392,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
+    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user.
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
     redirectUrl := "https://test.contabo.de" // string | The redirect url used for resetting password (optional)
 
@@ -587,7 +412,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**userId** | **string** | The identifier of the user | 
+**userId** | **string** | The identifier of the user. | 
 
 ### Other Parameters
 
@@ -641,7 +466,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
+    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user.
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -662,7 +487,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**userId** | **string** | The identifier of the user | 
+**userId** | **string** | The identifier of the user. | 
 
 ### Other Parameters
 
@@ -761,9 +586,79 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## RetrieveUserIsPasswordSet
+
+> FindUserIsPasswordSetResponse RetrieveUserIsPasswordSet(ctx).XRequestId(xRequestId).XTraceId(xTraceId).UserId(userId).Execute()
+
+Get user is password set status
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
+    xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
+    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The user ID for checking if password is set for him (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.UsersApi.RetrieveUserIsPasswordSet(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).UserId(userId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `UsersApi.RetrieveUserIsPasswordSet``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `RetrieveUserIsPasswordSet`: FindUserIsPasswordSetResponse
+    fmt.Fprintf(os.Stdout, "Response from `UsersApi.RetrieveUserIsPasswordSet`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiRetrieveUserIsPasswordSetRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
+ **xTraceId** | **string** | Identifier to trace group of requests. | 
+ **userId** | **string** | The user ID for checking if password is set for him | 
+
+### Return type
+
+[**FindUserIsPasswordSetResponse**](FindUserIsPasswordSetResponse.md)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## RetrieveUserList
 
-> ListUserResponse RetrieveUserList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Email(email).Enabled(enabled).Owner(owner).Execute()
+> ListUserResponse RetrieveUserList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Email(email).Enabled(enabled).Default_(default_).Owner(owner).Search(search).Execute()
 
 List users
 
@@ -789,11 +684,13 @@ func main() {
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     email := "john.doe@example.com" // string | Filter as substring match for user emails. (optional)
     enabled := true // bool | Filter if user is enabled or not. (optional)
+    default_ := true // bool | Filter if user is default account or not. (optional)
     owner := true // bool | Filter if user is owner or not. (optional)
+    search := "John Doe" // string | Full text search when listing the users. Can be searched by `first name`, `last name`, `email` or `first name` and `last name` combined (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.UsersApi.RetrieveUserList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Email(email).Enabled(enabled).Owner(owner).Execute()
+    resp, r, err := api_client.UsersApi.RetrieveUserList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Email(email).Enabled(enabled).Default_(default_).Owner(owner).Search(search).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `UsersApi.RetrieveUserList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -821,7 +718,9 @@ Name | Type | Description  | Notes
  **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
  **email** | **string** | Filter as substring match for user emails. | 
  **enabled** | **bool** | Filter if user is enabled or not. | 
+ **default_** | **bool** | Filter if user is default account or not. | 
  **owner** | **bool** | Filter if user is owner or not. | 
+ **search** | **string** | Full text search when listing the users. Can be searched by &#x60;first name&#x60;, &#x60;last name&#x60;, &#x60;email&#x60; or &#x60;first name&#x60; and &#x60;last name&#x60; combined | 
 
 ### Return type
 
@@ -863,7 +762,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
+    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user.
     updateUserRequest := *openapiclient.NewUpdateUserRequest() // UpdateUserRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
@@ -885,7 +784,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**userId** | **string** | The identifier of the user | 
+**userId** | **string** | The identifier of the user. | 
 
 ### Other Parameters
 

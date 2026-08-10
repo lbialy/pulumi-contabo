@@ -10,10 +10,12 @@ Name | Type | Description | Notes
 **Name** | **string** | Instance Name | 
 **DisplayName** | **string** | Instance display name | 
 **InstanceId** | **int64** | Instance ID | 
-**Region** | **string** | Instance Region where the compute instance should be located. | 
+**DataCenter** | **string** | The data center where your Private Network is located | 
+**Region** | **string** | Instance region where the compute instance should be located. | 
+**RegionName** | **string** | The name of the region where the instance is located. | 
 **ProductId** | **string** | Product ID | 
-**ImageId** | **string** | Image&#39;s id | 
-**IpConfig** | Pointer to [**IpConfig2**](IpConfig2.md) |  | [optional] 
+**ImageId** | Pointer to **NullableString** | Image&#39;s id. Null for empty (imageless) instances. | [optional] 
+**IpConfig** | [**IpConfig2**](IpConfig2.md) |  | 
 **MacAddress** | **string** | MAC Address | 
 **RamMb** | **float32** | Image RAM size in MB | 
 **CpuCores** | **int64** | CPU core count | 
@@ -22,18 +24,22 @@ Name | Type | Description | Notes
 **SshKeys** | **[]int64** | Array of &#x60;secretId&#x60;s of public SSH keys for logging into as &#x60;defaultUser&#x60; with administrator/root privileges. Applies to Linux/BSD systems. Please refer to Secrets Management API. | 
 **CreatedDate** | **time.Time** | The creation date for the instance | 
 **CancelDate** | **string** | The date on which the instance will be cancelled | 
-**Status** | [**InstanceStatus**](InstanceStatus.md) |  | 
+**Status** | [**InstanceStatus**](instanceStatus.md) | Instance&#39;s status | 
 **VHostId** | **int64** | ID of host system | 
+**VHostNumber** | **int64** | Number of host system | 
+**VHostName** | **string** | Name of host system | 
 **AddOns** | [**[]AddOnResponse**](AddOnResponse.md) |  | 
 **ErrorMessage** | Pointer to **string** | Message in case of an error. | [optional] 
 **ProductType** | **string** | Instance&#39;s category depending on Product Id | 
-**DefaultUser** | **string** | Default user name created for login during (re-)installation with administrative privileges. Allowed values for Linux/BSD are &#x60;admin&#x60; (use sudo to apply administrative privileges like root) or &#x60;root&#x60;. Allowed values for Windows are &#x60;admin&#x60; (has administrative privileges like administrator) or &#x60;administrator&#x60;. | 
+**ProductName** | **string** | Instance&#39;s Product Name | 
+**DefaultUser** | Pointer to **string** | Default user name created for login during (re-)installation with administrative privileges. Allowed values for Linux/BSD are &#x60;admin&#x60; (use sudo to apply administrative privileges like root) or &#x60;root&#x60;. Allowed values for Windows are &#x60;admin&#x60; (has administrative privileges like administrator) or &#x60;administrator&#x60;. | [optional] 
+**ApplicationId** | **string** | Application ID | 
 
 ## Methods
 
 ### NewListInstancesResponseData
 
-`func NewListInstancesResponseData(tenantId string, customerId string, additionalIps []AdditionalIp, name string, displayName string, instanceId int64, region string, productId string, imageId string, macAddress string, ramMb float32, cpuCores int64, osType string, diskMb float32, sshKeys []int64, createdDate time.Time, cancelDate string, status InstanceStatus, vHostId int64, addOns []AddOnResponse, productType string, defaultUser string, ) *ListInstancesResponseData`
+`func NewListInstancesResponseData(tenantId string, customerId string, additionalIps []AdditionalIp, name string, displayName string, instanceId int64, dataCenter string, region string, regionName string, productId string, ipConfig IpConfig2, macAddress string, ramMb float32, cpuCores int64, osType string, diskMb float32, sshKeys []int64, createdDate time.Time, cancelDate string, status InstanceStatus, vHostId int64, vHostNumber int64, vHostName string, addOns []AddOnResponse, productType string, productName string, applicationId string, ) *ListInstancesResponseData`
 
 NewListInstancesResponseData instantiates a new ListInstancesResponseData object
 This constructor will assign default values to properties that have it defined,
@@ -168,6 +174,26 @@ and a boolean to check if the value has been set.
 SetInstanceId sets InstanceId field to given value.
 
 
+### GetDataCenter
+
+`func (o *ListInstancesResponseData) GetDataCenter() string`
+
+GetDataCenter returns the DataCenter field if non-nil, zero value otherwise.
+
+### GetDataCenterOk
+
+`func (o *ListInstancesResponseData) GetDataCenterOk() (*string, bool)`
+
+GetDataCenterOk returns a tuple with the DataCenter field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDataCenter
+
+`func (o *ListInstancesResponseData) SetDataCenter(v string)`
+
+SetDataCenter sets DataCenter field to given value.
+
+
 ### GetRegion
 
 `func (o *ListInstancesResponseData) GetRegion() string`
@@ -186,6 +212,26 @@ and a boolean to check if the value has been set.
 `func (o *ListInstancesResponseData) SetRegion(v string)`
 
 SetRegion sets Region field to given value.
+
+
+### GetRegionName
+
+`func (o *ListInstancesResponseData) GetRegionName() string`
+
+GetRegionName returns the RegionName field if non-nil, zero value otherwise.
+
+### GetRegionNameOk
+
+`func (o *ListInstancesResponseData) GetRegionNameOk() (*string, bool)`
+
+GetRegionNameOk returns a tuple with the RegionName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRegionName
+
+`func (o *ListInstancesResponseData) SetRegionName(v string)`
+
+SetRegionName sets RegionName field to given value.
 
 
 ### GetProductId
@@ -227,7 +273,22 @@ and a boolean to check if the value has been set.
 
 SetImageId sets ImageId field to given value.
 
+### HasImageId
 
+`func (o *ListInstancesResponseData) HasImageId() bool`
+
+HasImageId returns a boolean if a field has been set.
+
+### SetImageIdNil
+
+`func (o *ListInstancesResponseData) SetImageIdNil(b bool)`
+
+ SetImageIdNil sets the value for ImageId to be an explicit nil
+
+### UnsetImageId
+`func (o *ListInstancesResponseData) UnsetImageId()`
+
+UnsetImageId ensures that no value is present for ImageId, not even an explicit nil
 ### GetIpConfig
 
 `func (o *ListInstancesResponseData) GetIpConfig() IpConfig2`
@@ -247,11 +308,6 @@ and a boolean to check if the value has been set.
 
 SetIpConfig sets IpConfig field to given value.
 
-### HasIpConfig
-
-`func (o *ListInstancesResponseData) HasIpConfig() bool`
-
-HasIpConfig returns a boolean if a field has been set.
 
 ### GetMacAddress
 
@@ -453,6 +509,46 @@ and a boolean to check if the value has been set.
 SetVHostId sets VHostId field to given value.
 
 
+### GetVHostNumber
+
+`func (o *ListInstancesResponseData) GetVHostNumber() int64`
+
+GetVHostNumber returns the VHostNumber field if non-nil, zero value otherwise.
+
+### GetVHostNumberOk
+
+`func (o *ListInstancesResponseData) GetVHostNumberOk() (*int64, bool)`
+
+GetVHostNumberOk returns a tuple with the VHostNumber field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVHostNumber
+
+`func (o *ListInstancesResponseData) SetVHostNumber(v int64)`
+
+SetVHostNumber sets VHostNumber field to given value.
+
+
+### GetVHostName
+
+`func (o *ListInstancesResponseData) GetVHostName() string`
+
+GetVHostName returns the VHostName field if non-nil, zero value otherwise.
+
+### GetVHostNameOk
+
+`func (o *ListInstancesResponseData) GetVHostNameOk() (*string, bool)`
+
+GetVHostNameOk returns a tuple with the VHostName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVHostName
+
+`func (o *ListInstancesResponseData) SetVHostName(v string)`
+
+SetVHostName sets VHostName field to given value.
+
+
 ### GetAddOns
 
 `func (o *ListInstancesResponseData) GetAddOns() []AddOnResponse`
@@ -518,6 +614,26 @@ and a boolean to check if the value has been set.
 SetProductType sets ProductType field to given value.
 
 
+### GetProductName
+
+`func (o *ListInstancesResponseData) GetProductName() string`
+
+GetProductName returns the ProductName field if non-nil, zero value otherwise.
+
+### GetProductNameOk
+
+`func (o *ListInstancesResponseData) GetProductNameOk() (*string, bool)`
+
+GetProductNameOk returns a tuple with the ProductName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetProductName
+
+`func (o *ListInstancesResponseData) SetProductName(v string)`
+
+SetProductName sets ProductName field to given value.
+
+
 ### GetDefaultUser
 
 `func (o *ListInstancesResponseData) GetDefaultUser() string`
@@ -536,6 +652,31 @@ and a boolean to check if the value has been set.
 `func (o *ListInstancesResponseData) SetDefaultUser(v string)`
 
 SetDefaultUser sets DefaultUser field to given value.
+
+### HasDefaultUser
+
+`func (o *ListInstancesResponseData) HasDefaultUser() bool`
+
+HasDefaultUser returns a boolean if a field has been set.
+
+### GetApplicationId
+
+`func (o *ListInstancesResponseData) GetApplicationId() string`
+
+GetApplicationId returns the ApplicationId field if non-nil, zero value otherwise.
+
+### GetApplicationIdOk
+
+`func (o *ListInstancesResponseData) GetApplicationIdOk() (*string, bool)`
+
+GetApplicationIdOk returns a tuple with the ApplicationId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetApplicationId
+
+`func (o *ListInstancesResponseData) SetApplicationId(v string)`
+
+SetApplicationId sets ApplicationId field to given value.
 
 
 

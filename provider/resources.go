@@ -16,6 +16,7 @@ package contabo
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 
 	"contabo.com/terraform-provider-contabo/contabo"
@@ -23,147 +24,171 @@ import (
 	shim "github.com/pulumi/pulumi-terraform-bridge/v3/pkg/tfshim"
 	shimv2 "github.com/pulumi/pulumi-terraform-bridge/v3/pkg/tfshim/sdk-v2"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/resource"
-	"github.com/thedataflows/pulumi-contabo/provider/pkg/version"
+
+	"github.com/lbialy/pulumi-contabo/provider/pkg/version"
 )
 
-// all of the token components used below.
 const (
-	// This variable controls the default name of the package in the package
-	// registries for nodejs and python:
+	// mainPkg controls the default name of the package in the nodejs and python
+	// package registries.
 	mainPkg = "contabo"
-	// modules:
-	mainMod = "index" // the contabo module
+	// mainMod is the only module this provider exposes.
+	mainMod = "index"
+
+	// tfProviderVersion is the version of github.com/contabo/terraform-provider-contabo
+	// this provider bridges. Keep in sync with the replace directive in go.mod.
+	tfProviderVersion = "0.1.44"
+
+	// upstreamRepoPathEnvVar points tfgen at a checkout of the upstream Terraform
+	// provider so it can pick up the markdown documentation under docs/. The bridge
+	// normally infers this from the Go module cache, but it cannot here: the upstream
+	// module declares itself as contabo.com/terraform-provider-contabo, so it is
+	// consumed through a replace directive and is not resolvable under its GitHub
+	// path. The Makefile sets this from `go list -m`.
+	upstreamRepoPathEnvVar = "PULUMI_CONTABO_UPSTREAM_REPO_PATH"
 )
 
-// preConfigureCallback is called before the providerConfigure function of the underlying provider.
-// It should validate that the provider can be configured, and provide actionable errors in the case
-// it cannot be. Configuration variables can be read from `vars` using the `stringValue` function -
-// for example `stringValue(vars, "accessKey")`.
-func preConfigureCallback(vars resource.PropertyMap, c shim.ResourceConfig) error {
+// oauth2Credentials lists the provider config keys that must be set for the upstream
+// provider to obtain a token, along with the environment variables that supply them.
+var oauth2Credentials = []struct {
+	pulumiKey string
+	envVars   []string
+}{
+	{"oauth2ClientId", []string{"CNTB_OAUTH2_CLIENT_ID", "CONTABO_OAUTH2_CLIENT_ID"}},
+	{"oauth2ClientSecret", []string{"CNTB_OAUTH2_CLIENT_SECRET", "CONTABO_OAUTH2_CLIENT_SECRET"}},
+	{"oauth2User", []string{"CNTB_OAUTH2_USER", "CONTABO_OAUTH2_USER"}},
+	{"oauth2Pass", []string{"CNTB_OAUTH2_PASS", "CONTABO_OAUTH2_PASS"}},
+}
+
+// preConfigureCallback reports missing credentials up front. Without it the upstream
+// provider fails during configuration with "error in getting access token", which gives
+// no hint about which value is missing.
+func preConfigureCallback(vars resource.PropertyMap, _ shim.ResourceConfig) error {
+	var missing []string
+	for _, cred := range oauth2Credentials {
+		if v, ok := vars[resource.PropertyKey(cred.pulumiKey)]; ok && v.IsString() && v.StringValue() != "" {
+			continue
+		}
+		if anyEnvVarSet(cred.envVars) {
+			continue
+		}
+		missing = append(missing, fmt.Sprintf("%s:%s (or $%s)", mainPkg, cred.pulumiKey, cred.envVars[0]))
+	}
+	if len(missing) > 0 {
+		return fmt.Errorf("missing Contabo API credentials: %v.\n"+
+			"Find them in the Customer Control Panel under Account Secret: "+
+			"https://new.contabo.com/account/security", missing)
+	}
 	return nil
 }
 
-// Provider returns additional overlaid schema and metadata associated with the provider..
-func Provider() tfbridge.ProviderInfo {
-	// Instantiate the Terraform provider
-	p := shimv2.NewProvider(contabo.Provider())
+func anyEnvVarSet(names []string) bool {
+	for _, name := range names {
+		if os.Getenv(name) != "" {
+			return true
+		}
+	}
+	return false
+}
 
-	// Create a Pulumi provider mapping
+// envDefault builds a config default that reads the upstream CNTB_ variable first and
+// falls back to the CONTABO_ variable this provider has accepted since v1.
+func envDefault(suffix string) *tfbridge.DefaultInfo {
+	return &tfbridge.DefaultInfo{
+		EnvVars: []string{"CNTB_" + suffix, "CONTABO_" + suffix},
+	}
+}
+
+// Provider returns additional overlaid schema and metadata associated with the provider.
+func Provider() tfbridge.ProviderInfo {
+	secret := true
+	mitLicense := tfbridge.MITLicenseType
+
 	prov := tfbridge.ProviderInfo{
-		P:    p,
-		Name: "contabo",
-		// DisplayName is a way to be able to change the casing of the provider
-		// name when being displayed on the Pulumi registry
-		DisplayName: "",
-		// The default publisher for all packages is Pulumi.
-		// Change this to your personal name (or a company name) that you
-		// would like to be shown in the Pulumi Registry if this package is published
-		// there.
-		Publisher: "Pulumi",
-		// LogoURL is optional but useful to help identify your package in the Pulumi Registry
-		// if this package is published there.
-		//
-		// You may host a logo on a domain you control or add an SVG logo for your package
-		// in your repository and use the raw content URL for that file as your logo URL.
-		LogoURL: "",
-		// PluginDownloadURL is an optional URL used to download the Provider
-		// for use in Pulumi programs
-		// e.g https://github.com/org/pulumi-provider-name/releases/
-		PluginDownloadURL: "",
-		Description:       "A Pulumi package for creating and managing contabo cloud resources.",
-		// category/cloud tag helps with categorizing the package in the Pulumi Registry.
-		// For all available categories, see `Keywords` in
-		// https://www.pulumi.com/docs/guides/pulumi-packages/schema/#package.
-		Keywords:   []string{"pulumi", "contabo", "category/cloud"},
-		License:    "Apache-2.0",
-		Homepage:   "https://www.pulumi.com",
-		Repository: "https://github.com/thedataflows/pulumi-contabo",
-		// The GitHub Org for the provider - defaults to `terraform-providers`. Note that this
-		// should match the TF provider module's require directive, not any replace directives.
-		GitHubOrg: "contabo",
+		P:                 shimv2.NewProvider(contabo.Provider()),
+		Name:              mainPkg,
+		DisplayName:       "Contabo",
+		Publisher:         "lbialy",
+		Version:           version.Version,
+		Description:       "A Pulumi package for creating and managing Contabo cloud resources",
+		Keywords:          []string{"pulumi", "contabo", "category/cloud"},
+		License:           "Apache-2.0",
+		Homepage:          "https://github.com/lbialy/pulumi-contabo",
+		Repository:        "https://github.com/lbialy/pulumi-contabo",
+		PluginDownloadURL: "github://api.github.com/lbialy/pulumi-contabo",
+
+		// The GitHub org of the *upstream Terraform provider*, used to locate its docs.
+		GitHubOrg:         "contabo",
+		TFProviderVersion: tfProviderVersion,
+		TFProviderLicense: &mitLicense,
+		UpstreamRepoPath:  os.Getenv(upstreamRepoPathEnvVar),
+
 		Config: map[string]*tfbridge.SchemaInfo{
-			// Add any required configuration here, or remove the example below if
-			// no additional points are required.
-			// "region": {
-			// 	Type: tfbridge.MakeType("region", "Region"),
-			// 	Default: &tfbridge.DefaultInfo{
-			// 		EnvVars: []string{"AWS_REGION", "AWS_DEFAULT_REGION"},
-			// 	},
-			// },
-			"oauth2_client_id": {
-				// Type:    tfbridge.MakeType("oauth2_client_id", "Oauth2 Client Id"),
-				Default: &tfbridge.DefaultInfo{EnvVars: []string{"CONTABO_OAUTH2_CLIENT_ID"}},
-			},
-			"oauth2_client_secret": {
-				// Type:    tfbridge.MakeType("oauth2_client_secret", "Oauth2 Client Secret"),
-				Default: &tfbridge.DefaultInfo{EnvVars: []string{"CONTABO_OAUTH2_CLIENT_SECRET"}},
-			},
-			"oauth2_user": {
-				// Type:    tfbridge.MakeType("oauth2_user", "Oauth2 User"),
-				Default: &tfbridge.DefaultInfo{EnvVars: []string{"CONTABO_OAUTH2_USER"}},
-			},
-			"oauth2_pass": {
-				// Type:    tfbridge.MakeType("oauth2_pass", "Oauth2 Pass"),
-				Default: &tfbridge.DefaultInfo{EnvVars: []string{"CONTABO_OAUTH2_PASS"}},
-			},
+			"api":              {Default: envDefault("API")},
+			"oauth2_token_url": {Default: envDefault("OAUTH2_TOKEN_URL")},
+			"oauth2_client_id": {Default: envDefault("OAUTH2_CLIENT_ID")},
+			"oauth2_user":      {Default: envDefault("OAUTH2_USER")},
+			// The upstream schema does not mark these Sensitive, so do it here to keep
+			// them out of plaintext state and CLI output.
+			"oauth2_client_secret": {Default: envDefault("OAUTH2_CLIENT_SECRET"), Secret: &secret},
+			"oauth2_pass":          {Default: envDefault("OAUTH2_PASS"), Secret: &secret},
 		},
 		PreConfigureCallback: preConfigureCallback,
+
 		Resources: map[string]*tfbridge.ResourceInfo{
-			// Map each resource in the Terraform provider to a Pulumi type. Two examples
-			// are below - the single line form is the common case. The multi-line form is
-			// needed only if you wish to override types or other default options.
-			//
-			// "aws_iam_role": {Tok: tfbridge.MakeResource(mainPkg, mainMod, "IamRole")}
-			//
-			// "aws_acm_certificate": {
-			// 	Tok: tfbridge.MakeResource(mainPkg, mainMod, "Certificate"),
-			// 	Fields: map[string]*tfbridge.SchemaInfo{
-			// 		"tags": {Type: tfbridge.MakeType(mainPkg, "Tags")},
-			// 	},
-			// },
-			"contabo_image":                 {Tok: tfbridge.MakeResource(mainPkg, mainMod, "image")},
-			"contabo_instance":              {Tok: tfbridge.MakeResource(mainPkg, mainMod, "instance")},
-			"contabo_instance_snapshot":     {Tok: tfbridge.MakeResource(mainPkg, mainMod, "instance_snapshot")},
-			"contabo_object_storage":        {Tok: tfbridge.MakeResource(mainPkg, mainMod, "object_storage")},
-			"contabo_object_storage_bucket": {Tok: tfbridge.MakeResource(mainPkg, mainMod, "object_storage_bucket")},
-			"contabo_private_network":       {Tok: tfbridge.MakeResource(mainPkg, mainMod, "private_network")},
-			"contabo_secret":                {Tok: tfbridge.MakeResource(mainPkg, mainMod, "secret")},
+			"contabo_firewall":              {Tok: tfbridge.MakeResource(mainPkg, mainMod, "Firewall")},
+			"contabo_image":                 {Tok: tfbridge.MakeResource(mainPkg, mainMod, "Image")},
+			"contabo_instance":              {Tok: tfbridge.MakeResource(mainPkg, mainMod, "Instance")},
+			"contabo_instance_snapshot":     {Tok: tfbridge.MakeResource(mainPkg, mainMod, "InstanceSnapshot")},
+			"contabo_object_storage":        {Tok: tfbridge.MakeResource(mainPkg, mainMod, "ObjectStorage")},
+			"contabo_object_storage_bucket": {Tok: tfbridge.MakeResource(mainPkg, mainMod, "ObjectStorageBucket")},
+			"contabo_private_network":       {Tok: tfbridge.MakeResource(mainPkg, mainMod, "PrivateNetwork")},
+			"contabo_secret": {
+				Tok: tfbridge.MakeResource(mainPkg, mainMod, "Secret"),
+				Fields: map[string]*tfbridge.SchemaInfo{
+					"value": {Secret: &secret},
+				},
+			},
+			"contabo_tag":            {Tok: tfbridge.MakeResource(mainPkg, mainMod, "Tag")},
+			"contabo_tag_assignment": {Tok: tfbridge.MakeResource(mainPkg, mainMod, "TagAssignment")},
 		},
+
 		DataSources: map[string]*tfbridge.DataSourceInfo{
-			// Map each resource in the Terraform provider to a Pulumi function. An example
-			// is below.
-			// "aws_ami": {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getAmi")},
+			"contabo_firewall":              {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getFirewall")},
 			"contabo_image":                 {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getImage")},
 			"contabo_instance":              {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getInstance")},
 			"contabo_instance_snapshot":     {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getInstanceSnapshot")},
 			"contabo_object_storage":        {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getObjectStorage")},
 			"contabo_object_storage_bucket": {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getObjectStorageBucket")},
 			"contabo_private_network":       {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getPrivateNetwork")},
-			"contabo_secret":                {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getSecret")},
+			"contabo_secret": {
+				Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getSecret"),
+				Fields: map[string]*tfbridge.SchemaInfo{
+					"value": {Secret: &secret},
+				},
+			},
+			"contabo_tag":            {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getTag")},
+			"contabo_tag_assignment": {Tok: tfbridge.MakeDataSource(mainPkg, mainMod, "getTagAssignment")},
 		},
+
 		JavaScript: &tfbridge.JavaScriptInfo{
-			// List any npm dependencies and their versions
+			PackageName: "@lbialy/contabo",
 			Dependencies: map[string]string{
 				"@pulumi/pulumi": "^3.0.0",
 			},
 			DevDependencies: map[string]string{
-				"@types/node": "^10.0.0", // so we can access strongly typed node definitions.
-				"@types/mime": "^2.0.0",
+				"@types/node": "^18.0.0",
 			},
-			// See the documentation for tfbridge.OverlayInfo for how to lay out this
-			// section, or refer to the AWS provider. Delete this section if there are
-			// no overlay files.
-			//Overlay: &tfbridge.OverlayInfo{},
 		},
 		Python: &tfbridge.PythonInfo{
-			// List any Python dependencies and their version ranges
+			PackageName: "pulumi_contabo",
 			Requires: map[string]string{
 				"pulumi": ">=3.0.0,<4.0.0",
 			},
 		},
 		Golang: &tfbridge.GolangInfo{
 			ImportBasePath: filepath.Join(
-				fmt.Sprintf("github.com/pulumi/pulumi-%[1]s/sdk/", mainPkg),
+				fmt.Sprintf("github.com/lbialy/pulumi-%[1]s/sdk/", mainPkg),
 				tfbridge.GetModuleMajorVersion(version.Version),
 				"go",
 				mainPkg,
@@ -171,6 +196,7 @@ func Provider() tfbridge.ProviderInfo {
 			GenerateResourceContainerTypes: true,
 		},
 		CSharp: &tfbridge.CSharpInfo{
+			RootNamespace: "Lbialy",
 			PackageReferences: map[string]string{
 				"Pulumi": "3.*",
 			},

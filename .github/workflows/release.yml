@@ -6,26 +6,18 @@ on:
 env:
   # THIS GITHUB_TOKEN IS A REQUIREMENT TO BE ABLE TO WRITE TO GH RELEASES
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  # IF YOU NEED TO PUBLISH A NPM PACKAGE THEN ENSURE A NPM_TOKEN SECRET IS SET
-  # AND PUBLISH_NPM: TRUE. IF YOU WANT TO PUBLISH TO A PRIVATE NPM REGISTRY
-  # THEN ENSURE THE NPM_REGISTRY_URL IS CHANGED
-  # NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-  # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  # To publish to npm, set PUBLISH_NPM to true and add an NPM_TOKEN secret.
+  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   PUBLISH_NPM: false
   NPM_REGISTRY_URL: https://registry.npmjs.org
-  # IF YOU NEED TO PUBLISH A NUGET PACKAGE THEN ENSURE AN NUGET_PUBLISH_KEY
-  # SECRET IS SET AND PUBLISH_NUGET: TRUE. IF YOU WANT TO PUBLISH TO AN ALTERNATIVE
-  # NPM REGISTRY THEN ENSURE THE NPM_REGISTRY_URL IS CHANGED
-  # NUGET_PUBLISH_KEY: ${{ secrets.NUGET_KEY }}
+  # To publish to NuGet, set PUBLISH_NUGET to true and add a NUGET_PUBLISH_KEY secret.
+  NUGET_PUBLISH_KEY: ${{ secrets.NUGET_PUBLISH_KEY }}
   NUGET_FEED_URL: https://api.nuget.org/v3/index.json
   PUBLISH_NUGET: false
-  # IF YOU NEED TO PUBLISH A PYPI PACKAGE THEN ENSURE AN PYPI_API_TOKEN
-  # SECRET IS SET AND PUBLISH_PYPI: TRUE. IF YOU WANT TO PUBLISH TO AN ALTERNATIVE
-  # PYPI REGISTRY THEN ENSURE THE PYPI_REPOSITORY_URL IS SET. IF YOU ARE USING AN API_TOKEN THEN
-  # YOU DO NOT NEED TO CHANGE THE PYPI_USERNAME (__token__) , IF YOU ARE USING PASSWORD AUTHENTICATION THEN YOU WILL
-  # NEED TO CHANGE TO USE THE CORRECT PASSWORD
-  # PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-  PYPI_USERNAME: "YOUR PYPI USERNAME HERE"
+  # To publish to PyPI, set PUBLISH_PYPI to true and add a PYPI_API_TOKEN secret.
+  PYPI_USERNAME: __token__
+  PYPI_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
   PYPI_REPOSITORY_URL: ""
   PUBLISH_PYPI: false
 jobs:
@@ -33,104 +25,95 @@ jobs:
     name: publish
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v2
-    - name: Unshallow clone for tags
-      run: git fetch --prune --unshallow --tags
-    - name: Install Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: ${{matrix.goversion}}
-    - name: Install pulumictl
-      uses: jaxxstorm/action-install-gh-release@v1.5.0
-      with:
-        repo: pulumi/pulumictl
-    - name: Set PreRelease Version
-      run: echo "GORELEASER_CURRENT_TAG=v$(pulumictl get version --language generic)" >> $GITHUB_ENV
-    - name: Run GoReleaser
-      uses: goreleaser/goreleaser-action@v2
-      with:
-        args: -p 3 release --clean
-        version: latest
-    strategy:
-      fail-fast: true
-      matrix:
-        goversion:
-        - 1.18.x
+      - name: Checkout Repo
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Install Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: provider/go.mod
+          cache-dependency-path: provider/go.sum
+      - name: Install pulumictl
+        uses: jaxxstorm/action-install-gh-release@v3.0.0
+        with:
+          repo: pulumi/pulumictl
+      - name: Set PreRelease Version
+        run: echo "GORELEASER_CURRENT_TAG=v$(pulumictl get version --language generic)" >> $GITHUB_ENV
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v7
+        with:
+          args: -p 3 release --clean
+          version: "~> v2"
   publish_sdk:
     name: Publish SDKs
     runs-on: ubuntu-latest
     needs: publish_binary
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
-      - name: Unshallow clone for tags
-        run: git fetch --prune --unshallow --tags
-      - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/checkout@v7
         with:
-          go-version: ${{ matrix.goversion }}
+          fetch-depth: 0
+      - name: Install Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: provider/go.mod
+          cache-dependency-path: |
+            provider/go.sum
+            sdk/go.sum
       - name: Install pulumictl
-        uses: jaxxstorm/action-install-gh-release@v1.5.0
+        uses: jaxxstorm/action-install-gh-release@v3.0.0
         with:
           repo: pulumi/pulumictl
       - name: Install Pulumi CLI
-        uses: pulumi/action-install-pulumi-cli@v2.0.0
+        uses: pulumi/actions@v7
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v7
         with:
-          node-version: ${{matrix.nodeversion}}
-          registry-url: ${{env.NPM_REGISTRY_URL}}
+          node-version: ${{ matrix.nodeversion }}
+          registry-url: ${{ env.NPM_REGISTRY_URL }}
       - name: Setup DotNet
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: ${{matrix.dotnetverson}}
+          dotnet-version: ${{ matrix.dotnetversion }}
       - name: Setup Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v7
         with:
-          python-version: ${{matrix.pythonversion}}
+          python-version: ${{ matrix.pythonversion }}
+      - name: Install Python build tooling
+        if: ${{ matrix.language == 'python' }}
+        run: python -m pip install --upgrade build
       - name: Build SDK
         run: make build_${{ matrix.language }}
-      # - name: Check worktree clean
-      #   run: |
-      #     git update-index -q --refresh
-      #     if ! git diff-files --quiet; then
-      #         >&2 echo "error: working tree is not clean, aborting!"
-      #         git status
-      #         git diff
-      #         exit 1
-      #     fi
       - if: ${{ matrix.language == 'python' && env.PUBLISH_PYPI == 'true' }}
         name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: ${{ env.PYPI_USERNAME }}
           password: ${{ env.PYPI_PASSWORD }}
-          packages_dir: ${{github.workspace}}/sdk/python/bin/dist
+          packages-dir: ${{ github.workspace }}/sdk/python/bin/dist
       - if: ${{ matrix.language == 'nodejs' && env.PUBLISH_NPM == 'true' }}
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish@v4
         with:
           access: "public"
           token: ${{ env.NPM_TOKEN }}
-          package: ${{github.workspace}}/sdk/nodejs/bin/package.json
+          package: ${{ github.workspace }}/sdk/nodejs/bin/package.json
       - if: ${{ matrix.language == 'dotnet' && env.PUBLISH_NUGET == 'true' }}
         name: publish nuget package
         run: |
-          dotnet nuget push ${{github.workspace}}/sdk/dotnet/bin/Debug/*.nupkg -s ${{ env.NUGET_FEED_URL }} -k ${{ env.NUGET_PUBLISH_KEY }}
+          dotnet nuget push ${{ github.workspace }}/sdk/dotnet/bin/Debug/*.nupkg -s ${{ env.NUGET_FEED_URL }} -k ${{ env.NUGET_PUBLISH_KEY }}
           echo "done publishing packages"
     strategy:
       fail-fast: true
       matrix:
         dotnetversion:
-          - 3.1.301
-        goversion:
-          - 1.18.x
+          - 8.0.x
         language:
           - nodejs
           - python
           - dotnet
           - go
         nodeversion:
-          - 14.x
+          - 20.x
         pythonversion:
-          - "3.9"
+          - "3.12"

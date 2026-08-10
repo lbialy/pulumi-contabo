@@ -1,6 +1,5 @@
-archives:
-  - id: archive
-    name_template: '{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}'
+version: 2
+project_name: pulumi-contabo
 before:
   hooks:
     - make tfgen
@@ -11,19 +10,27 @@ builds:
       - CGO_ENABLED=0
     goarch:
       - amd64
-      # - arm64
+      - arm64
     goos:
       - darwin
-      - windows
       - linux
+      - windows
     ldflags:
       # The line below MUST align with the module in current provider/go.mod
-      - -X github.com/thedataflows/pulumi-contabo/provider/pkg/version.Version={{.Tag }}
+      - -X github.com/lbialy/pulumi-contabo/provider/pkg/version.Version={{.Tag }}
     main: ./cmd/pulumi-resource-contabo/
+archives:
+  - id: archive
+    # Pulumi's plugin resolver downloads exactly this name from GitHub releases when a
+    # program declares the github:// PluginDownloadURL, so do not reformat it.
+    name_template: '{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}'
+    # tar.gz on every platform, including Windows: the resolver does not read zips.
+    formats:
+      - tar.gz
 changelog:
-  skip: true
+  disable: true
 release:
   disable: false
   prerelease: auto
 snapshot:
-  name_template: '{{ .Tag }}-SNAPSHOT'
+  version_template: '{{ .Tag }}-SNAPSHOT'

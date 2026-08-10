@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **DisplayName** | **string** | Instance display name | 
 **Name** | **string** | Instance name | 
 **ProductId** | **string** | Product id | 
-**IpConfig** | [**IpConfig**](IpConfig.md) |  | 
+**IpConfig** | [**IpConfig1**](IpConfig1.md) |  | 
 **RegionSlug** | **string** | Slug of the region where the instance is located. | 
 **RegionName** | **string** | Name of the region where the instance is located. | 
 **DataCenterSlug** | **string** | Slug of the data center where the instance is located. | 
@@ -18,7 +18,7 @@ Name | Type | Description | Notes
 
 ### NewInstanceDetails
 
-`func NewInstanceDetails(instanceId int64, displayName string, name string, productId string, ipConfig IpConfig, regionSlug string, regionName string, dataCenterSlug string, dataCenterName string, ) *InstanceDetails`
+`func NewInstanceDetails(instanceId int64, displayName string, name string, productId string, ipConfig IpConfig1, regionSlug string, regionName string, dataCenterSlug string, dataCenterName string, ) *InstanceDetails`
 
 NewInstanceDetails instantiates a new InstanceDetails object
 This constructor will assign default values to properties that have it defined,
@@ -115,20 +115,20 @@ SetProductId sets ProductId field to given value.
 
 ### GetIpConfig
 
-`func (o *InstanceDetails) GetIpConfig() IpConfig`
+`func (o *InstanceDetails) GetIpConfig() IpConfig1`
 
 GetIpConfig returns the IpConfig field if non-nil, zero value otherwise.
 
 ### GetIpConfigOk
 
-`func (o *InstanceDetails) GetIpConfigOk() (*IpConfig, bool)`
+`func (o *InstanceDetails) GetIpConfigOk() (*IpConfig1, bool)`
 
 GetIpConfigOk returns a tuple with the IpConfig field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetIpConfig
 
-`func (o *InstanceDetails) SetIpConfig(v IpConfig)`
+`func (o *InstanceDetails) SetIpConfig(v IpConfig1)`
 
 SetIpConfig sets IpConfig field to given value.
 

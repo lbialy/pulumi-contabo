@@ -4,22 +4,24 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ImageId** | **string** | ImageId to be used to setup the compute instance. Default is Ubuntu 20.04 | [default to "db1409d2-ed92-4f2f-978e-7b2fa4a1ec90"]
-**ProductId** | **string** | Default is V1 | [default to "V1"]
-**Region** | **string** | Instance Region where the compute instance should be located. Default is EU | [default to "EU"]
+**ImageId** | Pointer to **string** | ImageId to be used to setup the compute instance. Default is Ubuntu 22.04 | [optional] [default to "afecbb85-e2fc-46f0-9684-b46b1faf00bb"]
+**ProductId** | Pointer to **string** | Default is V153 | [optional] [default to "V153"]
+**Region** | Pointer to **string** | Instance Region where the compute instance should be located. Default is EU | [optional] [default to "EU"]
 **SshKeys** | Pointer to **[]int64** | Array of &#x60;secretId&#x60;s of public SSH keys for logging into as &#x60;defaultUser&#x60; with administrator/root privileges. Applies to Linux/BSD systems. Please refer to Secrets Management API. | [optional] 
 **RootPassword** | Pointer to **int64** | &#x60;secretId&#x60; of the password for the &#x60;defaultUser&#x60; with administrator/root privileges. For Linux/BSD please use SSH, for Windows RDP. Please refer to Secrets Management API. | [optional] 
 **UserData** | Pointer to **string** | [Cloud-Init](https://cloud-init.io/) Config in order to customize during start of compute instance. | [optional] 
 **License** | Pointer to **string** | Additional licence in order to enhance your chosen product, mainly needed for software licenses on your product (not needed for windows). | [optional] 
-**Period** | **int64** | Initial contract period in months. Available periods are: 1, 3, 6 and 12 months. Default to 1 month | [default to 1]
-**DisplayName** | Pointer to **string** | The display name of the instance | [optional] 
+**Period** | **int64** | Initial contract period in months. Available periods are: 1, 12 and 24 months. Default to 1 month | [default to 1]
+**DisplayName** | Pointer to **string** | The display name of the instance. Pass an empty string to leave it unset. | [optional] 
 **DefaultUser** | Pointer to **string** | Default user name created for login during (re-)installation with administrative privileges. Allowed values for Linux/BSD are &#x60;admin&#x60; (use sudo to apply administrative privileges like root) or &#x60;root&#x60;. Allowed values for Windows are &#x60;admin&#x60; (has administrative privileges like administrator) or &#x60;administrator&#x60;. | [optional] [default to "admin"]
+**AddOns** | Pointer to [**CreateInstanceAddons**](CreateInstanceAddons.md) | Set attributes in the addons object for the corresponding ones that need to be added to the instance | [optional] 
+**ApplicationId** | Pointer to **string** | Application ID | [optional] 
 
 ## Methods
 
 ### NewCreateInstanceRequest
 
-`func NewCreateInstanceRequest(imageId string, productId string, region string, period int64, ) *CreateInstanceRequest`
+`func NewCreateInstanceRequest(period int64, ) *CreateInstanceRequest`
 
 NewCreateInstanceRequest instantiates a new CreateInstanceRequest object
 This constructor will assign default values to properties that have it defined,
@@ -53,6 +55,11 @@ and a boolean to check if the value has been set.
 
 SetImageId sets ImageId field to given value.
 
+### HasImageId
+
+`func (o *CreateInstanceRequest) HasImageId() bool`
+
+HasImageId returns a boolean if a field has been set.
 
 ### GetProductId
 
@@ -73,6 +80,11 @@ and a boolean to check if the value has been set.
 
 SetProductId sets ProductId field to given value.
 
+### HasProductId
+
+`func (o *CreateInstanceRequest) HasProductId() bool`
+
+HasProductId returns a boolean if a field has been set.
 
 ### GetRegion
 
@@ -93,6 +105,11 @@ and a boolean to check if the value has been set.
 
 SetRegion sets Region field to given value.
 
+### HasRegion
+
+`func (o *CreateInstanceRequest) HasRegion() bool`
+
+HasRegion returns a boolean if a field has been set.
 
 ### GetSshKeys
 
@@ -263,6 +280,56 @@ SetDefaultUser sets DefaultUser field to given value.
 `func (o *CreateInstanceRequest) HasDefaultUser() bool`
 
 HasDefaultUser returns a boolean if a field has been set.
+
+### GetAddOns
+
+`func (o *CreateInstanceRequest) GetAddOns() CreateInstanceAddons`
+
+GetAddOns returns the AddOns field if non-nil, zero value otherwise.
+
+### GetAddOnsOk
+
+`func (o *CreateInstanceRequest) GetAddOnsOk() (*CreateInstanceAddons, bool)`
+
+GetAddOnsOk returns a tuple with the AddOns field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAddOns
+
+`func (o *CreateInstanceRequest) SetAddOns(v CreateInstanceAddons)`
+
+SetAddOns sets AddOns field to given value.
+
+### HasAddOns
+
+`func (o *CreateInstanceRequest) HasAddOns() bool`
+
+HasAddOns returns a boolean if a field has been set.
+
+### GetApplicationId
+
+`func (o *CreateInstanceRequest) GetApplicationId() string`
+
+GetApplicationId returns the ApplicationId field if non-nil, zero value otherwise.
+
+### GetApplicationIdOk
+
+`func (o *CreateInstanceRequest) GetApplicationIdOk() (*string, bool)`
+
+GetApplicationIdOk returns a tuple with the ApplicationId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetApplicationId
+
+`func (o *CreateInstanceRequest) SetApplicationId(v string)`
+
+SetApplicationId sets ApplicationId field to given value.
+
+### HasApplicationId
+
+`func (o *CreateInstanceRequest) HasApplicationId() bool`
+
+HasApplicationId returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

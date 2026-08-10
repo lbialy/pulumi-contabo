@@ -1,2 +1,2 @@
-// A Pulumi package for creating and managing contabo cloud resources.
+// A Pulumi package for creating and managing Contabo cloud resources
 package contabo

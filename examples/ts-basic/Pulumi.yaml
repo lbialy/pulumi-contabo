@@ -1,0 +1,3 @@
+name: contabo-ts-basic
+runtime: nodejs
+description: Creates a Contabo tag and secret, then reads the tag back through a data source.

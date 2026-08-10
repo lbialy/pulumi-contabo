@@ -13,7 +13,6 @@ Name | Type | Description | Notes
 **InstanceStatus** | [**[]InstanceStatusRepresentation**](InstanceStatusRepresentation.md) |  | 
 **Instances** | [**[]InstanceDetails**](InstanceDetails.md) |  | 
 **Rules** | [**Rules**](Rules.md) |  | 
-**IsDefault** | **bool** | The default firewall rules are assigned by default to newly created instances with Firewall Add-On if not specified otherwise. Exactly one firewall can be set as default. | 
 **CreatedDate** | **time.Time** | The creation date time for the firewall | 
 **UpdatedDate** | **time.Time** | The update date time for the firewall | 
 
@@ -21,7 +20,7 @@ Name | Type | Description | Notes
 
 ### NewListFirewallResponseData
 
-`func NewListFirewallResponseData(tenantId string, customerId string, firewallId string, name string, description string, status string, instanceStatus []InstanceStatusRepresentation, instances []InstanceDetails, rules Rules, isDefault bool, createdDate time.Time, updatedDate time.Time, ) *ListFirewallResponseData`
+`func NewListFirewallResponseData(tenantId string, customerId string, firewallId string, name string, description string, status string, instanceStatus []InstanceStatusRepresentation, instances []InstanceDetails, rules Rules, createdDate time.Time, updatedDate time.Time, ) *ListFirewallResponseData`
 
 NewListFirewallResponseData instantiates a new ListFirewallResponseData object
 This constructor will assign default values to properties that have it defined,
@@ -214,26 +213,6 @@ and a boolean to check if the value has been set.
 `func (o *ListFirewallResponseData) SetRules(v Rules)`
 
 SetRules sets Rules field to given value.
-
-
-### GetIsDefault
-
-`func (o *ListFirewallResponseData) GetIsDefault() bool`
-
-GetIsDefault returns the IsDefault field if non-nil, zero value otherwise.
-
-### GetIsDefaultOk
-
-`func (o *ListFirewallResponseData) GetIsDefaultOk() (*bool, bool)`
-
-GetIsDefaultOk returns a tuple with the IsDefault field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetIsDefault
-
-`func (o *ListFirewallResponseData) SetIsDefault(v bool)`
-
-SetIsDefault sets IsDefault field to given value.
 
 
 ### GetCreatedDate

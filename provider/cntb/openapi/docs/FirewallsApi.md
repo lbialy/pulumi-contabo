@@ -11,7 +11,7 @@ Method | HTTP request | Description
 [**PutFirewall**](FirewallsApi.md#PutFirewall) | **Put** /v1/firewalls/{firewallId} | Update specific firewall rules
 [**RetrieveFirewall**](FirewallsApi.md#RetrieveFirewall) | **Get** /v1/firewalls/{firewallId} | Get specific firewall by its id
 [**RetrieveFirewallList**](FirewallsApi.md#RetrieveFirewallList) | **Get** /v1/firewalls | List all firewalls
-[**SetDefaultFirewall**](FirewallsApi.md#SetDefaultFirewall) | **Put** /v1/firewalls/{firewallId}/default | Set specific firewall to be default
+[**RetrievePresetRules**](FirewallsApi.md#RetrievePresetRules) | **Get** /v1/firewalls/preset-rules | Get all preset rules
 [**UnassignInstanceFirewall**](FirewallsApi.md#UnassignInstanceFirewall) | **Delete** /v1/firewalls/{firewallId}/instances/{instanceId} | Remove instance from a firewall
 
 
@@ -389,7 +389,7 @@ Name | Type | Description  | Notes
 
 ## RetrieveFirewall
 
-> FindFirewallResponse RetrieveFirewall(ctx, firewallId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> FindFirewallResponse RetrieveFirewall(ctx, firewallId).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).InstanceIds(instanceIds).Execute()
 
 Get specific firewall by its id
 
@@ -411,10 +411,15 @@ func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
     firewallId := "b943b25a-c8b5-4570-9135-4bbaa7615b81" // string | The identifier of the firewall
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
+    page := int64(1) // int64 | Number of page to be fetched. (optional)
+    size := int64(10) // int64 | Number of elements per page. (optional)
+    orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
+    name := "My Firewall" // string | The name of the firewall (optional)
+    instanceIds := "12345,67890" // string | Comma separated instance IDs. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.FirewallsApi.RetrieveFirewall(context.Background(), firewallId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.FirewallsApi.RetrieveFirewall(context.Background(), firewallId).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).InstanceIds(instanceIds).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `FirewallsApi.RetrieveFirewall``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -442,6 +447,11 @@ Name | Type | Description  | Notes
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
 
  **xTraceId** | **string** | Identifier to trace group of requests. | 
+ **page** | **int64** | Number of page to be fetched. | 
+ **size** | **int64** | Number of elements per page. | 
+ **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
+ **name** | **string** | The name of the firewall | 
+ **instanceIds** | **string** | Comma separated instance IDs. | 
 
 ### Return type
 
@@ -463,7 +473,7 @@ Name | Type | Description  | Notes
 
 ## RetrieveFirewallList
 
-> ListFirewallResponse RetrieveFirewallList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).IsDefault(isDefault).Execute()
+> ListFirewallResponse RetrieveFirewallList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).InstanceIds(instanceIds).Execute()
 
 List all firewalls
 
@@ -488,11 +498,11 @@ func main() {
     size := int64(10) // int64 | Number of elements per page. (optional)
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     name := "My Firewall" // string | The name of the firewall (optional)
-    isDefault := true // bool | The default firewall rules are assigned by default to newly created instances with Firewall Add-On if not specified otherwise. Exactly one firewall can be set as default. (optional)
+    instanceIds := "12345,67890" // string | Comma separated instance IDs. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.FirewallsApi.RetrieveFirewallList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).IsDefault(isDefault).Execute()
+    resp, r, err := api_client.FirewallsApi.RetrieveFirewallList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).InstanceIds(instanceIds).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `FirewallsApi.RetrieveFirewallList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -519,7 +529,7 @@ Name | Type | Description  | Notes
  **size** | **int64** | Number of elements per page. | 
  **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
  **name** | **string** | The name of the firewall | 
- **isDefault** | **bool** | The default firewall rules are assigned by default to newly created instances with Firewall Add-On if not specified otherwise. Exactly one firewall can be set as default. | 
+ **instanceIds** | **string** | Comma separated instance IDs. | 
 
 ### Return type
 
@@ -539,13 +549,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## SetDefaultFirewall
+## RetrievePresetRules
 
-> SetDefaultFirewallResponse SetDefaultFirewall(ctx, firewallId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> ListPresetRulesResponse RetrievePresetRules(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).Execute()
 
-Set specific firewall to be default
-
-
+Get all preset rules
 
 ### Example
 
@@ -561,43 +569,45 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    firewallId := "b943b25a-c8b5-4570-9135-4bbaa7615b81" // string | The identifier of the firewall
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
+    page := int64(1) // int64 | Number of page to be fetched. (optional)
+    size := int64(10) // int64 | Number of elements per page. (optional)
+    orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
+    name := "SSH" // string | The name of preset rule (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.FirewallsApi.SetDefaultFirewall(context.Background(), firewallId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.FirewallsApi.RetrievePresetRules(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `FirewallsApi.SetDefaultFirewall``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `FirewallsApi.RetrievePresetRules``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `SetDefaultFirewall`: SetDefaultFirewallResponse
-    fmt.Fprintf(os.Stdout, "Response from `FirewallsApi.SetDefaultFirewall`: %v\n", resp)
+    // response from `RetrievePresetRules`: ListPresetRulesResponse
+    fmt.Fprintf(os.Stdout, "Response from `FirewallsApi.RetrievePresetRules`: %v\n", resp)
 }
 ```
 
 ### Path Parameters
 
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**firewallId** | **string** | The identifier of the firewall | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiSetDefaultFirewallRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiRetrievePresetRulesRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
-
  **xTraceId** | **string** | Identifier to trace group of requests. | 
+ **page** | **int64** | Number of page to be fetched. | 
+ **size** | **int64** | Number of elements per page. | 
+ **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
+ **name** | **string** | The name of preset rule | 
 
 ### Return type
 
-[**SetDefaultFirewallResponse**](SetDefaultFirewallResponse.md)
+[**ListPresetRulesResponse**](ListPresetRulesResponse.md)
 
 ### Authorization
 

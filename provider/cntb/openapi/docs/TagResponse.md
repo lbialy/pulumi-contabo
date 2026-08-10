@@ -6,15 +6,16 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **TenantId** | **string** | Your customer tenant id | 
 **CustomerId** | **string** | Your customer number | 
-**TagId** | **float32** | Tag&#39;s id | 
+**TagId** | **int64** | Tag&#39;s id | 
 **Name** | **string** | Tag&#39;s name | 
 **Color** | **string** | Tag&#39;s color | 
+**Description** | **string** | The description of the Tag | 
 
 ## Methods
 
 ### NewTagResponse
 
-`func NewTagResponse(tenantId string, customerId string, tagId float32, name string, color string, ) *TagResponse`
+`func NewTagResponse(tenantId string, customerId string, tagId int64, name string, color string, description string, ) *TagResponse`
 
 NewTagResponse instantiates a new TagResponse object
 This constructor will assign default values to properties that have it defined,
@@ -71,20 +72,20 @@ SetCustomerId sets CustomerId field to given value.
 
 ### GetTagId
 
-`func (o *TagResponse) GetTagId() float32`
+`func (o *TagResponse) GetTagId() int64`
 
 GetTagId returns the TagId field if non-nil, zero value otherwise.
 
 ### GetTagIdOk
 
-`func (o *TagResponse) GetTagIdOk() (*float32, bool)`
+`func (o *TagResponse) GetTagIdOk() (*int64, bool)`
 
 GetTagIdOk returns a tuple with the TagId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTagId
 
-`func (o *TagResponse) SetTagId(v float32)`
+`func (o *TagResponse) SetTagId(v int64)`
 
 SetTagId sets TagId field to given value.
 
@@ -127,6 +128,26 @@ and a boolean to check if the value has been set.
 `func (o *TagResponse) SetColor(v string)`
 
 SetColor sets Color field to given value.
+
+
+### GetDescription
+
+`func (o *TagResponse) GetDescription() string`
+
+GetDescription returns the Description field if non-nil, zero value otherwise.
+
+### GetDescriptionOk
+
+`func (o *TagResponse) GetDescriptionOk() (*string, bool)`
+
+GetDescriptionOk returns a tuple with the Description field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDescription
+
+`func (o *TagResponse) SetDescription(v string)`
+
+SetDescription sets Description field to given value.
 
 
 

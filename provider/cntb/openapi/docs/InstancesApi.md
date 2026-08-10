@@ -5,9 +5,12 @@ All URIs are relative to *https://api.contabo.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CancelInstance**](InstancesApi.md#CancelInstance) | **Post** /v1/compute/instances/{instanceId}/cancel | Cancel specific instance by id
+[**CheckSetNewHost**](InstancesApi.md#CheckSetNewHost) | **Get** /v1/compute/instances/{instanceId}/regionChange/check | Check if the instance can be moved to another host
 [**CreateInstance**](InstancesApi.md#CreateInstance) | **Post** /v1/compute/instances | Create a new instance
 [**PatchInstance**](InstancesApi.md#PatchInstance) | **Patch** /v1/compute/instances/{instanceId} | Update specific instance
 [**ReinstallInstance**](InstancesApi.md#ReinstallInstance) | **Put** /v1/compute/instances/{instanceId} | Reinstall specific instance
+[**RequestRegionChange**](InstancesApi.md#RequestRegionChange) | **Post** /v1/compute/instances/{instanceId}/regionChange | Request instance region change
+[**RetrieveAvailableInstanceProducts**](InstancesApi.md#RetrieveAvailableInstanceProducts) | **Get** /v1/compute/instances/{instanceId}/products/available | Get the available products of a specific instance
 [**RetrieveInstance**](InstancesApi.md#RetrieveInstance) | **Get** /v1/compute/instances/{instanceId} | Get specific instance by id
 [**RetrieveInstancesList**](InstancesApi.md#RetrieveInstancesList) | **Get** /v1/compute/instances | List instances
 [**UpgradeInstance**](InstancesApi.md#UpgradeInstance) | **Post** /v1/compute/instances/{instanceId}/upgrade | Upgrading instance capabilities
@@ -16,7 +19,7 @@ Method | HTTP request | Description
 
 ## CancelInstance
 
-> CancelInstanceResponse CancelInstance(ctx, instanceId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> CancelInstanceResponse CancelInstance(ctx, instanceId).XRequestId(xRequestId).CancelInstanceRequest(cancelInstanceRequest).XTraceId(xTraceId).Execute()
 
 Cancel specific instance by id
 
@@ -37,11 +40,12 @@ import (
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
     instanceId := int64(12345) // int64 | The identifier of the instance
+    cancelInstanceRequest := *openapiclient.NewCancelInstanceRequest() // CancelInstanceRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.InstancesApi.CancelInstance(context.Background(), instanceId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.InstancesApi.CancelInstance(context.Background(), instanceId).XRequestId(xRequestId).CancelInstanceRequest(cancelInstanceRequest).XTraceId(xTraceId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `InstancesApi.CancelInstance``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -68,11 +72,84 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
 
+ **cancelInstanceRequest** | [**CancelInstanceRequest**](CancelInstanceRequest.md) |  | 
  **xTraceId** | **string** | Identifier to trace group of requests. | 
 
 ### Return type
 
 [**CancelInstanceResponse**](CancelInstanceResponse.md)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CheckSetNewHost
+
+> CheckSetNewHost(ctx, instanceId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+
+Check if the instance can be moved to another host
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
+    instanceId := int64(12345) // int64 | The identifier of the instance
+    xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.InstancesApi.CheckSetNewHost(context.Background(), instanceId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `InstancesApi.CheckSetNewHost``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**instanceId** | **int64** | The identifier of the instance | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCheckSetNewHostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
+
+ **xTraceId** | **string** | Identifier to trace group of requests. | 
+
+### Return type
+
+ (empty response body)
 
 ### Authorization
 
@@ -110,7 +187,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    createInstanceRequest := *openapiclient.NewCreateInstanceRequest("3f184ab8-a600-4e7c-8c9b-3413e21a3752", "V3", "EU", int64(6)) // CreateInstanceRequest | 
+    createInstanceRequest := *openapiclient.NewCreateInstanceRequest(int64(6)) // CreateInstanceRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -310,6 +387,156 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## RequestRegionChange
+
+> InstanceRegionChangeResponse RequestRegionChange(ctx, instanceId).XRequestId(xRequestId).RegionChangeRequest(regionChangeRequest).XTraceId(xTraceId).Execute()
+
+Request instance region change
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
+    instanceId := int64(12345) // int64 | The identifier of the instance
+    regionChangeRequest := *openapiclient.NewRegionChangeRequest("EU", "installation") // RegionChangeRequest | 
+    xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.InstancesApi.RequestRegionChange(context.Background(), instanceId).XRequestId(xRequestId).RegionChangeRequest(regionChangeRequest).XTraceId(xTraceId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `InstancesApi.RequestRegionChange``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `RequestRegionChange`: InstanceRegionChangeResponse
+    fmt.Fprintf(os.Stdout, "Response from `InstancesApi.RequestRegionChange`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**instanceId** | **int64** | The identifier of the instance | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiRequestRegionChangeRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
+
+ **regionChangeRequest** | [**RegionChangeRequest**](RegionChangeRequest.md) |  | 
+ **xTraceId** | **string** | Identifier to trace group of requests. | 
+
+### Return type
+
+[**InstanceRegionChangeResponse**](InstanceRegionChangeResponse.md)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## RetrieveAvailableInstanceProducts
+
+> ListInstanceProductsResponse RetrieveAvailableInstanceProducts(ctx, instanceId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+
+Get the available products of a specific instance
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
+    instanceId := int64(12345) // int64 | The identifier of the instance
+    xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.InstancesApi.RetrieveAvailableInstanceProducts(context.Background(), instanceId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `InstancesApi.RetrieveAvailableInstanceProducts``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `RetrieveAvailableInstanceProducts`: ListInstanceProductsResponse
+    fmt.Fprintf(os.Stdout, "Response from `InstancesApi.RetrieveAvailableInstanceProducts`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**instanceId** | **int64** | The identifier of the instance | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiRetrieveAvailableInstanceProductsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
+
+ **xTraceId** | **string** | Identifier to trace group of requests. | 
+
+### Return type
+
+[**ListInstanceProductsResponse**](ListInstanceProductsResponse.md)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## RetrieveInstance
 
 > FindInstanceResponse RetrieveInstance(ctx, instanceId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
@@ -386,7 +613,7 @@ Name | Type | Description  | Notes
 
 ## RetrieveInstancesList
 
-> ListInstancesResponse RetrieveInstancesList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).Execute()
+> ListInstancesResponse RetrieveInstancesList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).ProductIds(productIds).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Suspended(suspended).Search(search).CustomerId(customerId).TenantId(tenantId).Execute()
 
 List instances
 
@@ -411,16 +638,24 @@ func main() {
     size := int64(10) // int64 | Number of elements per page. (optional)
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     name := "vmd12345" // string | The name of the instance (optional)
+    displayName := "myTestInstance" // string | The display name of the instance (optional)
+    dataCenter := "European Union 1" // string | The data center of the instance (optional)
     region := "EU" // string | The Region of the instance (optional)
     instanceId := int64(100) // int64 | The identifier of the instance (deprecated) (optional)
     instanceIds := "100, 101, 102" // string | Comma separated instances identifiers (optional)
     status := "provisioning,installing" // string | The status of the instance (optional)
+    productIds := "V68,V77" // string | Identifiers of the instance products (optional)
     addOnIds := "1044,827" // string | Identifiers of Addons the instances have (optional)
     productTypes := "ssd, hdd, nvme" // string | Comma separated instance's category depending on Product Id (optional)
+    ipConfig := true // bool | Filter instances that have an ip config (optional)
+    suspended := false // bool | Filter instances by suspension state. When set to false, suspended instances are excluded from the response. Any other value returns all instances (default behavior). (optional)
+    search := "vmd12345" // string | Full text search when listing the instances. Can be searched by `name`, `displayName`, `ipAddress` (optional)
+    customerId := "22223" // string | Filter by customer ID (optional)
+    tenantId := "DE" // string | Filter by tenant ID (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.InstancesApi.RetrieveInstancesList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).Execute()
+    resp, r, err := api_client.InstancesApi.RetrieveInstancesList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).ProductIds(productIds).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Suspended(suspended).Search(search).CustomerId(customerId).TenantId(tenantId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `InstancesApi.RetrieveInstancesList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -447,12 +682,20 @@ Name | Type | Description  | Notes
  **size** | **int64** | Number of elements per page. | 
  **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
  **name** | **string** | The name of the instance | 
+ **displayName** | **string** | The display name of the instance | 
+ **dataCenter** | **string** | The data center of the instance | 
  **region** | **string** | The Region of the instance | 
  **instanceId** | **int64** | The identifier of the instance (deprecated) | 
  **instanceIds** | **string** | Comma separated instances identifiers | 
  **status** | **string** | The status of the instance | 
+ **productIds** | **string** | Identifiers of the instance products | 
  **addOnIds** | **string** | Identifiers of Addons the instances have | 
  **productTypes** | **string** | Comma separated instance&#39;s category depending on Product Id | 
+ **ipConfig** | **bool** | Filter instances that have an ip config | 
+ **suspended** | **bool** | Filter instances by suspension state. When set to false, suspended instances are excluded from the response. Any other value returns all instances (default behavior). | 
+ **search** | **string** | Full text search when listing the instances. Can be searched by &#x60;name&#x60;, &#x60;displayName&#x60;, &#x60;ipAddress&#x60; | 
+ **customerId** | **string** | Filter by customer ID | 
+ **tenantId** | **string** | Filter by tenant ID | 
 
 ### Return type
 

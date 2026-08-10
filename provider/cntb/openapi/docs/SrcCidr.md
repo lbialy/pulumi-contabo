@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Ipv4** | Pointer to **[]string** | IP Address | [optional] 
-**Ipv6** | Pointer to **[]string** | IP Address | [optional] 
+**Ipv4** | Pointer to **[]string** | IPv4 addresses in CIDR notation or \&quot;AnyIPv4\&quot; to allow all IPv4 sources (translates to 0.0.0.0/0) | [optional] 
+**Ipv6** | Pointer to **[]string** | IPv6 addresses in CIDR notation or \&quot;AnyIPv6\&quot; to allow all IPv6 sources (translates to ::/0) | [optional] 
 
 ## Methods
 

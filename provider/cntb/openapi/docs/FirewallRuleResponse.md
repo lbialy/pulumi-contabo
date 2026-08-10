@@ -9,12 +9,13 @@ Name | Type | Description | Notes
 **SrcCidr** | [**SrcCidr**](SrcCidr.md) |  | 
 **Action** | **string** | Currently only &#x60;accept&#x60; is supported. | 
 **Status** | **string** | Status of the inbound rule. An inactive rule is removed from all assigned instances. | 
+**DisplayName** | **string** | Display name for the firewall rule. | 
 
 ## Methods
 
 ### NewFirewallRuleResponse
 
-`func NewFirewallRuleResponse(protocol string, destPorts []string, srcCidr SrcCidr, action string, status string, ) *FirewallRuleResponse`
+`func NewFirewallRuleResponse(protocol string, destPorts []string, srcCidr SrcCidr, action string, status string, displayName string, ) *FirewallRuleResponse`
 
 NewFirewallRuleResponse instantiates a new FirewallRuleResponse object
 This constructor will assign default values to properties that have it defined,
@@ -127,6 +128,26 @@ and a boolean to check if the value has been set.
 `func (o *FirewallRuleResponse) SetStatus(v string)`
 
 SetStatus sets Status field to given value.
+
+
+### GetDisplayName
+
+`func (o *FirewallRuleResponse) GetDisplayName() string`
+
+GetDisplayName returns the DisplayName field if non-nil, zero value otherwise.
+
+### GetDisplayNameOk
+
+`func (o *FirewallRuleResponse) GetDisplayNameOk() (*string, bool)`
+
+GetDisplayNameOk returns a tuple with the DisplayName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDisplayName
+
+`func (o *FirewallRuleResponse) SetDisplayName(v string)`
+
+SetDisplayName sets DisplayName field to given value.
 
 
 

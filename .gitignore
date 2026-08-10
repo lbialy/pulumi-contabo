@@ -21,3 +21,10 @@ provider/**/schema-embed.json
 **/version.txt
 **/nuget
 **/dist
+
+# openapi-generator jar downloaded by scripts/regen-openapi.sh
+.cache/
+
+# local Contabo credentials
+.env
+*.env

@@ -19,9 +19,9 @@ package main
 import (
 	_ "embed"
 
+	contabo "github.com/lbialy/pulumi-contabo/provider"
+	"github.com/lbialy/pulumi-contabo/provider/pkg/version"
 	"github.com/pulumi/pulumi-terraform-bridge/v3/pkg/tfbridge"
-	contabo "github.com/thedataflows/pulumi-contabo/provider"
-	"github.com/thedataflows/pulumi-contabo/provider/pkg/version"
 )
 
 //go:embed schema-embed.json

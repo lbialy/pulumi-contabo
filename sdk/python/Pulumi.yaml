@@ -1,0 +1,3 @@
+name: contabo
+description: A Pulumi resource provider for contabo.
+language: python

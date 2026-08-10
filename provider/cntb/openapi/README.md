@@ -76,11 +76,111 @@ Invoke-WebRequest -Uri 'https://api.contabo.com/v1/compute/instances' -Method 'G
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    ```sh
    cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<API User from Customer Control Panel> --oauth2-password='<API Password from Customer Control Panel>'
    ```
 
 5. Use the CLI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -99,7 +199,7 @@ Invoke-WebRequest -Uri 'https://api.contabo.com/v1/compute/instances' -Method 'G
 
 ## API Overview
 
-### [Compute Mangement](#tag/Instances)
+### [Compute Management](#tag/Instances)
 
 The Compute Management API allows you to manage compute resources (e.g. creation, deletion, starting, stopping) of VPS and VDS (please note that Storage VPS are not supported via API or CLI) as well as managing snapshots and custom images. It also offers you to take advantage of [cloud-init](https://cloud-init.io/) at least on our default / standard images (for custom images you'll need to provide cloud-init support packages). The API offers provisioning of cloud-init scripts via the `user_data` field.
 
@@ -141,8 +241,108 @@ If you need to allow other persons or automation scripts to access specific API 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    This allows you to specify a restriction to certain functions of an API by allowing control over POST (=Create), GET (=Read), PUT/PATCH (=Update) and DELETE (=Delete) methods for each API endpoint (URL) individually.
 * `resourcePermission`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -277,17 +477,44 @@ All URIs are relative to *https://api.contabo.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*CustomerApi* | [**RetrieveCustomer**](docs/CustomerApi.md#retrievecustomer) | **Get** /v1/customer | Get customer info
-*CustomerApi* | [**RetrievePaymentMethod**](docs/CustomerApi.md#retrievepaymentmethod) | **Get** /v1/customer/payment-method | List current payment method
-*DPASApi* | [**ConcludeDpa**](docs/DPASApi.md#concludedpa) | **Post** /v1/dpas/{dpaId}/conclude | Concludes a data processing agreement
-*DPASApi* | [**CreateDpa**](docs/DPASApi.md#createdpa) | **Post** /v1/dpas | Create a new data processing agreement
-*DPASApi* | [**DownloadDpaFile**](docs/DPASApi.md#downloaddpafile) | **Get** /v1/dpas/{dpaId}/download | Download concluded DPA PDF file
-*DPASApi* | [**DownloadPreviewDpa**](docs/DPASApi.md#downloadpreviewdpa) | **Get** /v1/dpas/{dpaId}/preview | Download preview version of DPA
-*DPASApi* | [**ListDpaServices**](docs/DPASApi.md#listdpaservices) | **Get** /v1/dpas/services | List services
-*DPASApi* | [**RetrieveDpa**](docs/DPASApi.md#retrievedpa) | **Get** /v1/dpas/{dpaId} | Get specific Dpa by it&#39;s dpaId
-*DPASApi* | [**RetrieveDpaList**](docs/DPASApi.md#retrievedpalist) | **Get** /v1/dpas | List all Dpas
-*DPASApi* | [**TerminateDpa**](docs/DPASApi.md#terminatedpa) | **Post** /v1/dpas/{dpaId}/terminate | Terminate an existing DPA by id
-*DpaAuditsApi* | [**RetrieveDpaAuditsList**](docs/DpaAuditsApi.md#retrievedpaauditslist) | **Get** /v1/dpas/audits | List history about your Dpas (audit)
+*CheckCollectionTemplatesApi* | [**GetExtCheckCollectionTemplate**](docs/CheckCollectionTemplatesApi.md#getextcheckcollectiontemplate) | **Get** /v1/troubleshooting/check-collection-templates/{checkCollectionTemplateId} | Get check
+*CheckCollectionTemplatesApi* | [**ListExtCheckCollectionTemplates**](docs/CheckCollectionTemplatesApi.md#listextcheckcollectiontemplates) | **Get** /v1/troubleshooting/check-collection-templates | List check collection templates
+*CheckCollectionsApi* | [**CancelExtCheckCollection**](docs/CheckCollectionsApi.md#cancelextcheckcollection) | **Patch** /v1/troubleshooting/check-collections/{checkCollectionId} | Cancel check collection
+*CheckCollectionsApi* | [**GetExtCheckCollection**](docs/CheckCollectionsApi.md#getextcheckcollection) | **Get** /v1/troubleshooting/check-collections/{checkCollectionId} | Get check collection
+*CheckCollectionsApi* | [**ListExtCheckCollections**](docs/CheckCollectionsApi.md#listextcheckcollections) | **Get** /v1/troubleshooting/check-collections | List check collections
+*CheckCollectionsApi* | [**StartExtCheckCollection**](docs/CheckCollectionsApi.md#startextcheckcollection) | **Post** /v1/troubleshooting/check-collections | Start check collection
+*ChecksApi* | [**CancelExtCheck**](docs/ChecksApi.md#cancelextcheck) | **Patch** /v1/troubleshooting/checks/{checkId} | Cancel check
+*ChecksApi* | [**GetExtCheck**](docs/ChecksApi.md#getextcheck) | **Get** /v1/troubleshooting/checks/{checkId} | Get check
+*ChecksApi* | [**ListExtChecks**](docs/ChecksApi.md#listextchecks) | **Get** /v1/troubleshooting/checks | List check
+*ChecksApi* | [**StartExtCheck**](docs/ChecksApi.md#startextcheck) | **Post** /v1/troubleshooting/checks | Start check
+*DNSApi* | [**BulkDeleteDnsZoneRecords**](docs/DNSApi.md#bulkdeletednszonerecords) | **Delete** /v1/dns/zones/{zoneName}/records/bulk | Bulk delete DNS zone records
+*DNSApi* | [**CreateDnsZone**](docs/DNSApi.md#creatednszone) | **Post** /v1/dns/zones | Create DNS zone
+*DNSApi* | [**CreateDnsZoneRecord**](docs/DNSApi.md#creatednszonerecord) | **Post** /v1/dns/zones/{zoneName}/records | Create DNS zone record
+*DNSApi* | [**CreatePtrRecord**](docs/DNSApi.md#createptrrecord) | **Post** /v1/dns/ptrs | Create a new PTR Record using ip address
+*DNSApi* | [**DeleteDnsZone**](docs/DNSApi.md#deletednszone) | **Delete** /v1/dns/zones/{zoneName} | Delete a DNS zone.
+*DNSApi* | [**DeleteDnsZoneRecord**](docs/DNSApi.md#deletednszonerecord) | **Delete** /v1/dns/zones/{zoneName}/records/{recordId} | Delete a DNS zone record
+*DNSApi* | [**DeletePtrRecord**](docs/DNSApi.md#deleteptrrecord) | **Delete** /v1/dns/ptrs/{ipAddress} | Delete a PTR Record using ip address
+*DNSApi* | [**RetrieveDnsZone**](docs/DNSApi.md#retrievednszone) | **Get** /v1/dns/zones/{zoneName} | Retrieve a DNS Zone by zone name
+*DNSApi* | [**RetrieveDnsZoneRecordsList**](docs/DNSApi.md#retrievednszonerecordslist) | **Get** /v1/dns/zones/{zoneName}/records | List a DNS Zone&#39;s records
+*DNSApi* | [**RetrieveDnsZonesList**](docs/DNSApi.md#retrievednszoneslist) | **Get** /v1/dns/zones | List DNS zones
+*DNSApi* | [**RetrievePtrRecord**](docs/DNSApi.md#retrieveptrrecord) | **Get** /v1/dns/ptrs/{ipAddress} | Retrieve a PTR Record by ip address
+*DNSApi* | [**RetrievePtrRecordsList**](docs/DNSApi.md#retrieveptrrecordslist) | **Get** /v1/dns/ptrs | List PTR records
+*DNSApi* | [**UpdateDnsZoneRecord**](docs/DNSApi.md#updatednszonerecord) | **Patch** /v1/dns/zones/{zoneName}/records/{recordId} | Update DNS zone record
+*DNSApi* | [**UpdatePtrRecord**](docs/DNSApi.md#updateptrrecord) | **Put** /v1/dns/ptrs/{ipAddress} | Edit a PTR Record by ip address
+*DNSAuditsApi* | [**RetrieveDnsAuditsList**](docs/DNSAuditsApi.md#retrievednsauditslist) | **Get** /v1/dns/zones/audits | List history about your DNS Zones (audit)
+*DNSAuditsApi* | [**RetrieveRecordAuditsList**](docs/DNSAuditsApi.md#retrieverecordauditslist) | **Get** /v1/dns/records/audits | List history about your DNS Records (audit)
+*DomainsApi* | [**CancelDomain**](docs/DomainsApi.md#canceldomain) | **Post** /v1/domains/{domain}/cancel | Cancel a specific domain
+*DomainsApi* | [**ConfirmDomainTransferOut**](docs/DomainsApi.md#confirmdomaintransferout) | **Post** /v1/domains/{domain}/transfer-out | Confirm transfer out for a domain
+*DomainsApi* | [**GetAuthCode**](docs/DomainsApi.md#getauthcode) | **Post** /v1/domains/{domain}/generate-auth-code | Get auth code for a domain
+*DomainsApi* | [**ListDomains**](docs/DomainsApi.md#listdomains) | **Get** /v1/domains | List all domains
+*DomainsApi* | [**ListPendingActions**](docs/DomainsApi.md#listpendingactions) | **Get** /v1/domains/pending-actions | List pending domain actions
+*DomainsApi* | [**OrderDomain**](docs/DomainsApi.md#orderdomain) | **Post** /v1/domains | Create or transfer a domain
+*DomainsApi* | [**RetrieveDomain**](docs/DomainsApi.md#retrievedomain) | **Get** /v1/domains/{domain} | List specific domain
+*DomainsApi* | [**RevokeCancelDomain**](docs/DomainsApi.md#revokecanceldomain) | **Post** /v1/domains/{domain}/revoke-cancellation | Revoke cancellation for a specific domain
+*DomainsApi* | [**RevokeDomainTransferOut**](docs/DomainsApi.md#revokedomaintransferout) | **Delete** /v1/domains/{domain}/transfer-out | Revoke transfer out for a domain
+*DomainsApi* | [**UpdateDomain**](docs/DomainsApi.md#updatedomain) | **Patch** /v1/domains/{domain} | Update a specific domain
+*DomainsApi* | [**ValidateDomainAvailability**](docs/DomainsApi.md#validatedomainavailability) | **Post** /v1/registries-domains/{domain}/check-availability | Check domain availablility
+*DomainsAuditsApi* | [**RetrieveDomainsAuditsList**](docs/DomainsAuditsApi.md#retrievedomainsauditslist) | **Get** /v1/domains/audits | List history about your Domains (audit)
 *FirewallsApi* | [**AssignInstanceFirewall**](docs/FirewallsApi.md#assigninstancefirewall) | **Post** /v1/firewalls/{firewallId}/instances/{instanceId} | Add instance to a firewall
 *FirewallsApi* | [**CreateFirewall**](docs/FirewallsApi.md#createfirewall) | **Post** /v1/firewalls | Create a new firewall definition
 *FirewallsApi* | [**DeleteFirewall**](docs/FirewallsApi.md#deletefirewall) | **Delete** /v1/firewalls/{firewallId} | Delete existing firewall by id
@@ -295,9 +522,16 @@ Class | Method | HTTP request | Description
 *FirewallsApi* | [**PutFirewall**](docs/FirewallsApi.md#putfirewall) | **Put** /v1/firewalls/{firewallId} | Update specific firewall rules
 *FirewallsApi* | [**RetrieveFirewall**](docs/FirewallsApi.md#retrievefirewall) | **Get** /v1/firewalls/{firewallId} | Get specific firewall by its id
 *FirewallsApi* | [**RetrieveFirewallList**](docs/FirewallsApi.md#retrievefirewalllist) | **Get** /v1/firewalls | List all firewalls
-*FirewallsApi* | [**SetDefaultFirewall**](docs/FirewallsApi.md#setdefaultfirewall) | **Put** /v1/firewalls/{firewallId}/default | Set specific firewall to be default
+*FirewallsApi* | [**RetrievePresetRules**](docs/FirewallsApi.md#retrievepresetrules) | **Get** /v1/firewalls/preset-rules | Get all preset rules
 *FirewallsApi* | [**UnassignInstanceFirewall**](docs/FirewallsApi.md#unassigninstancefirewall) | **Delete** /v1/firewalls/{firewallId}/instances/{instanceId} | Remove instance from a firewall
 *FirewallsAuditsApi* | [**RetrieveFirewallAuditsList**](docs/FirewallsAuditsApi.md#retrievefirewallauditslist) | **Get** /v1/firewalls/audits | List history about your Firewalls (audit)
+*HandlesApi* | [**CreateHandle**](docs/HandlesApi.md#createhandle) | **Post** /v1/domains/handles | Create specific handle
+*HandlesApi* | [**ListHandles**](docs/HandlesApi.md#listhandles) | **Get** /v1/domains/handles | List all handles
+*HandlesApi* | [**RemoveHandle**](docs/HandlesApi.md#removehandle) | **Delete** /v1/domains/handles/{handleId} | Remove specific handle
+*HandlesApi* | [**RetrieveHandle**](docs/HandlesApi.md#retrievehandle) | **Get** /v1/domains/handles/{handleId} | Get specific handle
+*HandlesApi* | [**SetDefaultHandle**](docs/HandlesApi.md#setdefaulthandle) | **Patch** /v1/domains/handles/{handleId}/default | Set default handle
+*HandlesApi* | [**UpdateHandle**](docs/HandlesApi.md#updatehandle) | **Put** /v1/domains/handles/{handleId} | Update specific handle
+*HandlesAuditsApi* | [**RetrieveHandlesAuditsList**](docs/HandlesAuditsApi.md#retrievehandlesauditslist) | **Get** /v1/domains/handles/audits | List history about your handles (audit)
 *ImagesApi* | [**CreateCustomImage**](docs/ImagesApi.md#createcustomimage) | **Post** /v1/compute/images | Provide a custom image
 *ImagesApi* | [**DeleteImage**](docs/ImagesApi.md#deleteimage) | **Delete** /v1/compute/images/{imageId} | Delete an uploaded custom image by its id
 *ImagesApi* | [**RetrieveCustomImagesStats**](docs/ImagesApi.md#retrievecustomimagesstats) | **Get** /v1/compute/images/stats | List statistics regarding the customer&#39;s custom images
@@ -305,24 +539,24 @@ Class | Method | HTTP request | Description
 *ImagesApi* | [**RetrieveImageList**](docs/ImagesApi.md#retrieveimagelist) | **Get** /v1/compute/images | List available standard and custom images
 *ImagesApi* | [**UpdateImage**](docs/ImagesApi.md#updateimage) | **Patch** /v1/compute/images/{imageId} | Update custom image name by its id
 *ImagesAuditsApi* | [**RetrieveImageAuditsList**](docs/ImagesAuditsApi.md#retrieveimageauditslist) | **Get** /v1/compute/images/audits | List history about your custom images (audit)
-*InstanceActionsApi* | [**Restart**](docs/InstanceActionsApi.md#restart) | **Post** /v1/compute/instances/{instanceId}/actions/restart | Restart a compute instance / resource identified by its id
+*InstanceActionsApi* | [**Rescue**](docs/InstanceActionsApi.md#rescue) | **Post** /v1/compute/instances/{instanceId}/actions/rescue | Rescue a compute instance / resource identified by its id
+*InstanceActionsApi* | [**ResetPasswordAction**](docs/InstanceActionsApi.md#resetpasswordaction) | **Post** /v1/compute/instances/{instanceId}/actions/resetPassword | Reset password for a compute instance / resource referenced by an id
+*InstanceActionsApi* | [**Restart**](docs/InstanceActionsApi.md#restart) | **Post** /v1/compute/instances/{instanceId}/actions/restart | Restart a compute instance / resource identified by its id.
 *InstanceActionsApi* | [**Shutdown**](docs/InstanceActionsApi.md#shutdown) | **Post** /v1/compute/instances/{instanceId}/actions/shutdown | Shutdown compute instance / resource by its id
 *InstanceActionsApi* | [**Start**](docs/InstanceActionsApi.md#start) | **Post** /v1/compute/instances/{instanceId}/actions/start | Start a compute instance / resource identified by its id
 *InstanceActionsApi* | [**Stop**](docs/InstanceActionsApi.md#stop) | **Post** /v1/compute/instances/{instanceId}/actions/stop | Stop compute instance / resource by its id
 *InstanceActionsAuditsApi* | [**RetrieveInstancesActionsAuditsList**](docs/InstanceActionsAuditsApi.md#retrieveinstancesactionsauditslist) | **Get** /v1/compute/instances/actions/audits | List history about your actions (audit) triggered via the API
 *InstancesApi* | [**CancelInstance**](docs/InstancesApi.md#cancelinstance) | **Post** /v1/compute/instances/{instanceId}/cancel | Cancel specific instance by id
+*InstancesApi* | [**CheckSetNewHost**](docs/InstancesApi.md#checksetnewhost) | **Get** /v1/compute/instances/{instanceId}/regionChange/check | Check if the instance can be moved to another host
 *InstancesApi* | [**CreateInstance**](docs/InstancesApi.md#createinstance) | **Post** /v1/compute/instances | Create a new instance
 *InstancesApi* | [**PatchInstance**](docs/InstancesApi.md#patchinstance) | **Patch** /v1/compute/instances/{instanceId} | Update specific instance
 *InstancesApi* | [**ReinstallInstance**](docs/InstancesApi.md#reinstallinstance) | **Put** /v1/compute/instances/{instanceId} | Reinstall specific instance
+*InstancesApi* | [**RequestRegionChange**](docs/InstancesApi.md#requestregionchange) | **Post** /v1/compute/instances/{instanceId}/regionChange | Request instance region change
+*InstancesApi* | [**RetrieveAvailableInstanceProducts**](docs/InstancesApi.md#retrieveavailableinstanceproducts) | **Get** /v1/compute/instances/{instanceId}/products/available | Get the available products of a specific instance
 *InstancesApi* | [**RetrieveInstance**](docs/InstancesApi.md#retrieveinstance) | **Get** /v1/compute/instances/{instanceId} | Get specific instance by id
 *InstancesApi* | [**RetrieveInstancesList**](docs/InstancesApi.md#retrieveinstanceslist) | **Get** /v1/compute/instances | List instances
 *InstancesApi* | [**UpgradeInstance**](docs/InstancesApi.md#upgradeinstance) | **Post** /v1/compute/instances/{instanceId}/upgrade | Upgrading instance capabilities
-*InstancesAuditsApi* | [**RetrieveInstancesAuditsList**](docs/InstancesAuditsApi.md#retrieveinstancesauditslist) | **Get** /v1/compute/instances/audits | List history about your instances (audit) triggered via the API
-*InternalApi* | [**CreateTicket**](docs/InternalApi.md#createticket) | **Post** /v1/create-ticket | Create a new support ticket
-*InternalApi* | [**RetrieveUserIsPasswordSet**](docs/InternalApi.md#retrieveuserispasswordset) | **Get** /v1/users/is-password-set | Get user is password set status
-*InvoicesApi* | [**GetFile**](docs/InvoicesApi.md#getfile) | **Get** /v1/invoices/{invoiceId} | Download invoice
-*InvoicesApi* | [**RetrieveInvoiceNumberList**](docs/InvoicesApi.md#retrieveinvoicenumberlist) | **Get** /v1/invoices | List invoices
-*LedgerApi* | [**RetrieveLedgerEntriesList**](docs/LedgerApi.md#retrieveledgerentrieslist) | **Get** /v1/ledger/ledger-entries | List ledger entries
+*InstancesAuditsApi* | [**RetrieveInstancesAuditsList**](docs/InstancesAuditsApi.md#retrieveinstancesauditslist) | **Get** /v1/compute/instances/audits | List history about your instances (audit)
 *ObjectStoragesApi* | [**CancelObjectStorage**](docs/ObjectStoragesApi.md#cancelobjectstorage) | **Patch** /v1/object-storages/{objectStorageId}/cancel | Cancels the specified object storage at the next possible date
 *ObjectStoragesApi* | [**CreateObjectStorage**](docs/ObjectStoragesApi.md#createobjectstorage) | **Post** /v1/object-storages | Create a new object storage
 *ObjectStoragesApi* | [**RetrieveDataCenterList**](docs/ObjectStoragesApi.md#retrievedatacenterlist) | **Get** /v1/data-centers | List data centers
@@ -332,8 +566,6 @@ Class | Method | HTTP request | Description
 *ObjectStoragesApi* | [**UpdateObjectStorage**](docs/ObjectStoragesApi.md#updateobjectstorage) | **Patch** /v1/object-storages/{objectStorageId} | Modifies the display name of object storage
 *ObjectStoragesApi* | [**UpgradeObjectStorage**](docs/ObjectStoragesApi.md#upgradeobjectstorage) | **Post** /v1/object-storages/{objectStorageId}/resize | Upgrade object storage size resp. update autoscaling settings.
 *ObjectStoragesAuditsApi* | [**RetrieveObjectStorageAuditsList**](docs/ObjectStoragesAuditsApi.md#retrieveobjectstorageauditslist) | **Get** /v1/object-storages/audits | List history about your object storages (audit)
-*PaymentMethodsApi* | [**RetrievePaymentMethodList**](docs/PaymentMethodsApi.md#retrievepaymentmethodlist) | **Get** /v1/payment-methods | List payment methods
-*PresetRulesApi* | [**RetrievePresetRules**](docs/PresetRulesApi.md#retrievepresetrules) | **Get** /v1/firewalls/preset-rules | Get all preset rules
 *PrivateNetworksApi* | [**AssignInstancePrivateNetwork**](docs/PrivateNetworksApi.md#assigninstanceprivatenetwork) | **Post** /v1/private-networks/{privateNetworkId}/instances/{instanceId} | Add instance to a Private Network
 *PrivateNetworksApi* | [**CreatePrivateNetwork**](docs/PrivateNetworksApi.md#createprivatenetwork) | **Post** /v1/private-networks | Create a new Private Network
 *PrivateNetworksApi* | [**DeletePrivateNetwork**](docs/PrivateNetworksApi.md#deleteprivatenetwork) | **Delete** /v1/private-networks/{privateNetworkId} | Delete existing Private Network by id
@@ -342,6 +574,10 @@ Class | Method | HTTP request | Description
 *PrivateNetworksApi* | [**RetrievePrivateNetworkList**](docs/PrivateNetworksApi.md#retrieveprivatenetworklist) | **Get** /v1/private-networks | List Private Networks
 *PrivateNetworksApi* | [**UnassignInstancePrivateNetwork**](docs/PrivateNetworksApi.md#unassigninstanceprivatenetwork) | **Delete** /v1/private-networks/{privateNetworkId}/instances/{instanceId} | Remove instance from a Private Network
 *PrivateNetworksAuditsApi* | [**RetrievePrivateNetworkAuditsList**](docs/PrivateNetworksAuditsApi.md#retrieveprivatenetworkauditslist) | **Get** /v1/private-networks/audits | List history about your Private Networks (audit)
+*RemediesApi* | [**CancelExtRemedy**](docs/RemediesApi.md#cancelextremedy) | **Patch** /v1/troubleshooting/remedies/{remedyId} | Cancel remedy
+*RemediesApi* | [**GetExtRemedy**](docs/RemediesApi.md#getextremedy) | **Get** /v1/troubleshooting/remedies/{remedyId} | Get remedy
+*RemediesApi* | [**ListExtRemedies**](docs/RemediesApi.md#listextremedies) | **Get** /v1/troubleshooting/remedies | List remedy
+*RemediesApi* | [**StartExtRemedy**](docs/RemediesApi.md#startextremedy) | **Post** /v1/troubleshooting/remedies | Start remedy
 *RolesApi* | [**CreateRole**](docs/RolesApi.md#createrole) | **Post** /v1/roles | Create a new role
 *RolesApi* | [**DeleteRole**](docs/RolesApi.md#deleterole) | **Delete** /v1/roles/{roleId} | Delete existing role by id
 *RolesApi* | [**RetrieveApiPermissionsList**](docs/RolesApi.md#retrieveapipermissionslist) | **Get** /v1/roles/api-permissions | List of API permissions
@@ -359,7 +595,7 @@ Class | Method | HTTP request | Description
 *SnapshotsApi* | [**DeleteSnapshot**](docs/SnapshotsApi.md#deletesnapshot) | **Delete** /v1/compute/instances/{instanceId}/snapshots/{snapshotId} | Delete existing snapshot by id
 *SnapshotsApi* | [**RetrieveSnapshot**](docs/SnapshotsApi.md#retrievesnapshot) | **Get** /v1/compute/instances/{instanceId}/snapshots/{snapshotId} | Retrieve a specific snapshot by id
 *SnapshotsApi* | [**RetrieveSnapshotList**](docs/SnapshotsApi.md#retrievesnapshotlist) | **Get** /v1/compute/instances/{instanceId}/snapshots | List snapshots
-*SnapshotsApi* | [**RollbackSnapshot**](docs/SnapshotsApi.md#rollbacksnapshot) | **Post** /v1/compute/instances/{instanceId}/snapshots/{snapshotId}/rollback | Rollback the instance to a specific snapshot by id
+*SnapshotsApi* | [**RollbackSnapshot**](docs/SnapshotsApi.md#rollbacksnapshot) | **Post** /v1/compute/instances/{instanceId}/snapshots/{snapshotId}/rollback | Revert the instance to a particular snapshot based on its identifier
 *SnapshotsApi* | [**UpdateSnapshot**](docs/SnapshotsApi.md#updatesnapshot) | **Patch** /v1/compute/instances/{instanceId}/snapshots/{snapshotId} | Update specific snapshot by id
 *SnapshotsAuditsApi* | [**RetrieveSnapshotsAuditsList**](docs/SnapshotsAuditsApi.md#retrievesnapshotsauditslist) | **Get** /v1/compute/snapshots/audits | List history about your snapshots (audit) triggered via the API
 *TagAssignmentsApi* | [**CreateAssignment**](docs/TagAssignmentsApi.md#createassignment) | **Post** /v1/tags/{tagId}/assignments/{resourceType}/{resourceId} | Create a new assignment for the tag
@@ -372,56 +608,109 @@ Class | Method | HTTP request | Description
 *TagsApi* | [**RetrieveTag**](docs/TagsApi.md#retrievetag) | **Get** /v1/tags/{tagId} | Get specific tag by id
 *TagsApi* | [**RetrieveTagList**](docs/TagsApi.md#retrievetaglist) | **Get** /v1/tags | List tags
 *TagsApi* | [**UpdateTag**](docs/TagsApi.md#updatetag) | **Patch** /v1/tags/{tagId} | Update specific tag by id
-*TagsAuditsApi* | [**RetrieveTagAuditsList**](docs/TagsAuditsApi.md#retrievetagauditslist) | **Get** /v1/tags/audits | List history about your tags (audit)
+*TagsAuditsApi* | [**RetrieveTagAuditsList**](docs/TagsAuditsApi.md#retrievetagauditslist) | **Get** /v1/tags/audits | List history about your assignments (audit)
+*UserAccountsApi* | [**ListUserAccounts**](docs/UserAccountsApi.md#listuseraccounts) | **Get** /v1/me/accounts | List of your accounts
+*UserAccountsApi* | [**MakeDefaultAccount**](docs/UserAccountsApi.md#makedefaultaccount) | **Patch** /v1/me/account/{tenantId}/{customerId} | Make user account default
+*UserAccountsApi* | [**SwitchAccount**](docs/UserAccountsApi.md#switchaccount) | **Post** /v1/me/action/switchAccount | Switch user account
 *UsersApi* | [**CreateUser**](docs/UsersApi.md#createuser) | **Post** /v1/users | Create a new user
 *UsersApi* | [**DeleteUser**](docs/UsersApi.md#deleteuser) | **Delete** /v1/users/{userId} | Delete existing user by id
 *UsersApi* | [**GenerateClientSecret**](docs/UsersApi.md#generateclientsecret) | **Put** /v1/users/client/secret | Generate new client secret
-*UsersApi* | [**GetObjectStorageCredentials**](docs/UsersApi.md#getobjectstoragecredentials) | **Get** /v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId} | Get S3 compatible object storage credentials
-*UsersApi* | [**ListObjectStorageCredentials**](docs/UsersApi.md#listobjectstoragecredentials) | **Get** /v1/users/{userId}/object-storages/credentials | Get list of S3 compatible object storage credentials for user
-*UsersApi* | [**RegenerateCredentials**](docs/UsersApi.md#regeneratecredentials) | **Patch** /v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId} | Regenerates secret key of specified user for the S3 compatible object storages
+*UsersApi* | [**GenerateSsoToken**](docs/UsersApi.md#generatessotoken) | **Post** /v1/users/sso-token | Generate one time SSO token
 *UsersApi* | [**ResendEmailVerification**](docs/UsersApi.md#resendemailverification) | **Post** /v1/users/{userId}/resend-email-verification | Resend email verification
 *UsersApi* | [**ResetPassword**](docs/UsersApi.md#resetpassword) | **Post** /v1/users/{userId}/reset-password | Send reset password email
 *UsersApi* | [**RetrieveUser**](docs/UsersApi.md#retrieveuser) | **Get** /v1/users/{userId} | Get specific user by id
 *UsersApi* | [**RetrieveUserClient**](docs/UsersApi.md#retrieveuserclient) | **Get** /v1/users/client | Get client
+*UsersApi* | [**RetrieveUserIsPasswordSet**](docs/UsersApi.md#retrieveuserispasswordset) | **Get** /v1/users/is-password-set | Get user is password set status
 *UsersApi* | [**RetrieveUserList**](docs/UsersApi.md#retrieveuserlist) | **Get** /v1/users | List users
 *UsersApi* | [**UpdateUser**](docs/UsersApi.md#updateuser) | **Patch** /v1/users/{userId} | Update specific user by id
 *UsersAuditsApi* | [**RetrieveUserAuditsList**](docs/UsersAuditsApi.md#retrieveuserauditslist) | **Get** /v1/users/audits | List history about your users (audit)
-*VIPApi* | [**AssignIp**](docs/VIPApi.md#assignip) | **Post** /v1/vips/{ip}/instances/{instanceId} | Assign a VIP to a VPS/VDS
+*UsersObjectStorageCredentialsApi* | [**GetObjectStorageCredentials**](docs/UsersObjectStorageCredentialsApi.md#getobjectstoragecredentials) | **Get** /v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId} | Get S3 compatible object storage credentials.
+*UsersObjectStorageCredentialsApi* | [**ListObjectStorageCredentials**](docs/UsersObjectStorageCredentialsApi.md#listobjectstoragecredentials) | **Get** /v1/users/{userId}/object-storages/credentials | Get list of S3 compatible object storage credentials for user.
+*UsersObjectStorageCredentialsApi* | [**RegenerateObjectStorageCredentials**](docs/UsersObjectStorageCredentialsApi.md#regenerateobjectstoragecredentials) | **Patch** /v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId} | Regenerates secret key of specified user for the S3 compatible object storages.
+*VIPApi* | [**AssignIp**](docs/VIPApi.md#assignip) | **Post** /v1/vips/{ip}/{resourceType}/{resourceId} | Assign a VIP to an VPS/VDS/Bare Metal
 *VIPApi* | [**RetrieveVip**](docs/VIPApi.md#retrievevip) | **Get** /v1/vips/{ip} | Get specific VIP by ip
 *VIPApi* | [**RetrieveVipList**](docs/VIPApi.md#retrieveviplist) | **Get** /v1/vips | List VIPs
-*VIPApi* | [**UnassignIp**](docs/VIPApi.md#unassignip) | **Delete** /v1/vips/{ip}/instances/{instanceId} | Unassign a VIP from a VPS/VDS
-*ZeropsApi* | [**RetrieveZeropsUser**](docs/ZeropsApi.md#retrievezeropsuser) | **Get** /v1/zerops/user | get zerops user
-*ZeropsApi* | [**SignInZerops**](docs/ZeropsApi.md#signinzerops) | **Get** /v1/zerops/sign-in | authenticate to zerops
+*VIPApi* | [**UnassignIp**](docs/VIPApi.md#unassignip) | **Delete** /v1/vips/{ip}/{resourceType}/{resourceId} | Unassign a VIP to a VPS/VDS/Bare Metal
+*VipAuditsApi* | [**RetrieveVipAuditsList**](docs/VipAuditsApi.md#retrievevipauditslist) | **Get** /v1/vips/audits | List history about your VIPs (audit)
 
 
 ## Documentation For Models
 
+ - [AccountDetails](docs/AccountDetails.md)
+ - [AccountOrgResponse](docs/AccountOrgResponse.md)
+ - [AccountsListResponse](docs/AccountsListResponse.md)
+ - [AddOnQuantityRequest](docs/AddOnQuantityRequest.md)
+ - [AddOnRequest](docs/AddOnRequest.md)
  - [AddOnResponse](docs/AddOnResponse.md)
  - [AdditionalIp](docs/AdditionalIp.md)
- - [Address](docs/Address.md)
- - [AffectedPersons](docs/AffectedPersons.md)
+ - [ApiBulkDeleteDnsZoneRecordsResponse](docs/ApiBulkDeleteDnsZoneRecordsResponse.md)
+ - [ApiDnsZoneRecordResponse](docs/ApiDnsZoneRecordResponse.md)
+ - [ApiDnsZoneResponse](docs/ApiDnsZoneResponse.md)
  - [ApiPermissionsResponse](docs/ApiPermissionsResponse.md)
+ - [ApiPtrRecordResponse](docs/ApiPtrRecordResponse.md)
+ - [ApplicationConfig](docs/ApplicationConfig.md)
+ - [ApplicationMetaData](docs/ApplicationMetaData.md)
+ - [ApplicationRequirements](docs/ApplicationRequirements.md)
+ - [ApplicationResponse](docs/ApplicationResponse.md)
  - [AssignInstanceFirewallResponse](docs/AssignInstanceFirewallResponse.md)
  - [AssignInstancePrivateNetworkResponse](docs/AssignInstancePrivateNetworkResponse.md)
  - [AssignVipResponse](docs/AssignVipResponse.md)
+ - [AssignedTagResponse](docs/AssignedTagResponse.md)
  - [AssignmentAuditResponse](docs/AssignmentAuditResponse.md)
  - [AssignmentResponse](docs/AssignmentResponse.md)
+ - [AuditCountResponse](docs/AuditCountResponse.md)
  - [AutoScalingTypeRequest](docs/AutoScalingTypeRequest.md)
  - [AutoScalingTypeResponse](docs/AutoScalingTypeResponse.md)
+ - [BaseCheckCollectionCreateRequest](docs/BaseCheckCollectionCreateRequest.md)
+ - [BaseCheckCreateRequest](docs/BaseCheckCreateRequest.md)
+ - [BaseRemedyCreateRequest](docs/BaseRemedyCreateRequest.md)
+ - [BulkDeleteDnsZoneRecordsRequest](docs/BulkDeleteDnsZoneRecordsRequest.md)
+ - [BulkDeleteResultResponse](docs/BulkDeleteResultResponse.md)
+ - [CancelDomainRequest](docs/CancelDomainRequest.md)
+ - [CancelInstanceRequest](docs/CancelInstanceRequest.md)
  - [CancelInstanceResponse](docs/CancelInstanceResponse.md)
  - [CancelInstanceResponseData](docs/CancelInstanceResponseData.md)
+ - [CancelObjectStorageRequest](docs/CancelObjectStorageRequest.md)
  - [CancelObjectStorageResponse](docs/CancelObjectStorageResponse.md)
  - [CancelObjectStorageResponseData](docs/CancelObjectStorageResponseData.md)
+ - [CancelRequest](docs/CancelRequest.md)
+ - [ChangedAuthCode](docs/ChangedAuthCode.md)
+ - [Changes](docs/Changes.md)
+ - [CheckCollectionCheckTemplates](docs/CheckCollectionCheckTemplates.md)
+ - [CheckCollectionCreateRequest](docs/CheckCollectionCreateRequest.md)
+ - [CheckCollectionResponse](docs/CheckCollectionResponse.md)
+ - [CheckCollectionTemplateResponse](docs/CheckCollectionTemplateResponse.md)
+ - [CheckCollectionTemplatesCheckTemplates](docs/CheckCollectionTemplatesCheckTemplates.md)
+ - [CheckCollectionTemplatesGetResponse](docs/CheckCollectionTemplatesGetResponse.md)
+ - [CheckCollectionTemplatesListResponse](docs/CheckCollectionTemplatesListResponse.md)
+ - [CheckCollectionsAuditListResponse](docs/CheckCollectionsAuditListResponse.md)
+ - [CheckCollectionsAuditResponse](docs/CheckCollectionsAuditResponse.md)
+ - [CheckCollectionsGetResponse](docs/CheckCollectionsGetResponse.md)
+ - [CheckCollectionsListResponse](docs/CheckCollectionsListResponse.md)
+ - [CheckCollectionsReplayRequest](docs/CheckCollectionsReplayRequest.md)
+ - [CheckCreateRequest](docs/CheckCreateRequest.md)
+ - [CheckResponse](docs/CheckResponse.md)
+ - [CheckTemplateResponse](docs/CheckTemplateResponse.md)
+ - [CheckTemplatesGetResponse](docs/CheckTemplatesGetResponse.md)
+ - [CheckTemplatesListResponse](docs/CheckTemplatesListResponse.md)
+ - [ChecksAuditListResponse](docs/ChecksAuditListResponse.md)
+ - [ChecksAuditResponse](docs/ChecksAuditResponse.md)
+ - [ChecksGetResponse](docs/ChecksGetResponse.md)
+ - [ChecksListResponse](docs/ChecksListResponse.md)
+ - [ChecksReplayRequest](docs/ChecksReplayRequest.md)
  - [ClientResponse](docs/ClientResponse.md)
  - [ClientSecretResponse](docs/ClientSecretResponse.md)
+ - [CmsErrorsResponse](docs/CmsErrorsResponse.md)
  - [CreateAssignmentResponse](docs/CreateAssignmentResponse.md)
  - [CreateCustomImageFailResponse](docs/CreateCustomImageFailResponse.md)
  - [CreateCustomImageRequest](docs/CreateCustomImageRequest.md)
  - [CreateCustomImageResponse](docs/CreateCustomImageResponse.md)
  - [CreateCustomImageResponseData](docs/CreateCustomImageResponseData.md)
- - [CreateDpaRequest](docs/CreateDpaRequest.md)
+ - [CreateDnsZoneRecordRequest](docs/CreateDnsZoneRecordRequest.md)
+ - [CreateDnsZoneRequest](docs/CreateDnsZoneRequest.md)
  - [CreateFirewallRequest](docs/CreateFirewallRequest.md)
  - [CreateFirewallResponse](docs/CreateFirewallResponse.md)
+ - [CreateInstanceAddons](docs/CreateInstanceAddons.md)
  - [CreateInstanceRequest](docs/CreateInstanceRequest.md)
  - [CreateInstanceResponse](docs/CreateInstanceResponse.md)
  - [CreateInstanceResponseData](docs/CreateInstanceResponseData.md)
@@ -430,6 +719,7 @@ Class | Method | HTTP request | Description
  - [CreateObjectStorageResponseData](docs/CreateObjectStorageResponseData.md)
  - [CreatePrivateNetworkRequest](docs/CreatePrivateNetworkRequest.md)
  - [CreatePrivateNetworkResponse](docs/CreatePrivateNetworkResponse.md)
+ - [CreatePtrRecordRequest](docs/CreatePtrRecordRequest.md)
  - [CreateRoleRequest](docs/CreateRoleRequest.md)
  - [CreateRoleResponse](docs/CreateRoleResponse.md)
  - [CreateRoleResponseData](docs/CreateRoleResponseData.md)
@@ -437,36 +727,52 @@ Class | Method | HTTP request | Description
  - [CreateSecretResponse](docs/CreateSecretResponse.md)
  - [CreateSnapshotRequest](docs/CreateSnapshotRequest.md)
  - [CreateSnapshotResponse](docs/CreateSnapshotResponse.md)
- - [CreateSnapshotResponseData](docs/CreateSnapshotResponseData.md)
  - [CreateTagRequest](docs/CreateTagRequest.md)
  - [CreateTagResponse](docs/CreateTagResponse.md)
  - [CreateTagResponseData](docs/CreateTagResponseData.md)
- - [CreateTicketRequest](docs/CreateTicketRequest.md)
- - [CreateTicketResponse](docs/CreateTicketResponse.md)
- - [CreateTicketResponseData](docs/CreateTicketResponseData.md)
  - [CreateUserRequest](docs/CreateUserRequest.md)
  - [CreateUserResponse](docs/CreateUserResponse.md)
  - [CreateUserResponseData](docs/CreateUserResponseData.md)
  - [CredentialData](docs/CredentialData.md)
  - [CustomImagesStatsResponse](docs/CustomImagesStatsResponse.md)
  - [CustomImagesStatsResponseData](docs/CustomImagesStatsResponseData.md)
- - [CustomerAddress](docs/CustomerAddress.md)
- - [CustomerEmail](docs/CustomerEmail.md)
- - [CustomerPhone](docs/CustomerPhone.md)
- - [CustomerResponse](docs/CustomerResponse.md)
- - [CustomerTypeBusiness](docs/CustomerTypeBusiness.md)
- - [CustomerTypePrivate](docs/CustomerTypePrivate.md)
  - [DataCenterResponse](docs/DataCenterResponse.md)
- - [DataProtectionOfficerRequest](docs/DataProtectionOfficerRequest.md)
- - [DatacenterCapabilities](docs/DatacenterCapabilities.md)
- - [DpaAuditResponse](docs/DpaAuditResponse.md)
- - [DpaResponse](docs/DpaResponse.md)
- - [DpaResponseData](docs/DpaResponseData.md)
- - [DpaServiceResponse](docs/DpaServiceResponse.md)
+ - [DnsZoneRecordResponse](docs/DnsZoneRecordResponse.md)
+ - [DnsZoneResponse](docs/DnsZoneResponse.md)
+ - [DomainAuditResponse](docs/DomainAuditResponse.md)
+ - [DomainAuditResponseData](docs/DomainAuditResponseData.md)
+ - [DomainAuthCodeRegenerateResponse](docs/DomainAuthCodeRegenerateResponse.md)
+ - [DomainAuthCodeResponse](docs/DomainAuthCodeResponse.md)
+ - [DomainCancel](docs/DomainCancel.md)
+ - [DomainCancelResponse](docs/DomainCancelResponse.md)
+ - [DomainCreateRequest](docs/DomainCreateRequest.md)
+ - [DomainCreateResponse](docs/DomainCreateResponse.md)
+ - [DomainDetails](docs/DomainDetails.md)
+ - [DomainFindResponse](docs/DomainFindResponse.md)
+ - [DomainHandles](docs/DomainHandles.md)
+ - [DomainPatchRequest](docs/DomainPatchRequest.md)
+ - [DomainPatchResponse](docs/DomainPatchResponse.md)
+ - [DomainPendingActionResponse](docs/DomainPendingActionResponse.md)
+ - [DomainPendingActionsListResponse](docs/DomainPendingActionsListResponse.md)
+ - [DomainResponse](docs/DomainResponse.md)
+ - [DomainResponseStatusError](docs/DomainResponseStatusError.md)
+ - [DomainsListResponse](docs/DomainsListResponse.md)
+ - [ExtCheckCollectionResponse](docs/ExtCheckCollectionResponse.md)
+ - [ExtCheckCollectionTemplateResponse](docs/ExtCheckCollectionTemplateResponse.md)
+ - [ExtCheckCollectionTemplatesGetResponse](docs/ExtCheckCollectionTemplatesGetResponse.md)
+ - [ExtCheckCollectionTemplatesListResponse](docs/ExtCheckCollectionTemplatesListResponse.md)
+ - [ExtCheckCollectionsGetResponse](docs/ExtCheckCollectionsGetResponse.md)
+ - [ExtCheckCollectionsListResponse](docs/ExtCheckCollectionsListResponse.md)
+ - [ExtCheckResponse](docs/ExtCheckResponse.md)
+ - [ExtChecksGetResponse](docs/ExtChecksGetResponse.md)
+ - [ExtChecksListResponse](docs/ExtChecksListResponse.md)
+ - [ExtRemediesGetResponse](docs/ExtRemediesGetResponse.md)
+ - [ExtRemediesListResponse](docs/ExtRemediesListResponse.md)
+ - [ExtRemedyResponse](docs/ExtRemedyResponse.md)
+ - [ExtraStorageRequest](docs/ExtraStorageRequest.md)
  - [FindAssignmentResponse](docs/FindAssignmentResponse.md)
  - [FindClientResponse](docs/FindClientResponse.md)
  - [FindCredentialResponse](docs/FindCredentialResponse.md)
- - [FindCustomerResponse](docs/FindCustomerResponse.md)
  - [FindFirewallResponse](docs/FindFirewallResponse.md)
  - [FindImageResponse](docs/FindImageResponse.md)
  - [FindInstanceResponse](docs/FindInstanceResponse.md)
@@ -475,24 +781,43 @@ Class | Method | HTTP request | Description
  - [FindRoleResponse](docs/FindRoleResponse.md)
  - [FindSecretResponse](docs/FindSecretResponse.md)
  - [FindSnapshotResponse](docs/FindSnapshotResponse.md)
+ - [FindSsoTokenResponse](docs/FindSsoTokenResponse.md)
+ - [FindSupportSignatureResponse](docs/FindSupportSignatureResponse.md)
  - [FindTagResponse](docs/FindTagResponse.md)
  - [FindUserIsPasswordSetResponse](docs/FindUserIsPasswordSetResponse.md)
  - [FindUserResponse](docs/FindUserResponse.md)
  - [FindVipResponse](docs/FindVipResponse.md)
- - [FindZeropsSignInResponse](docs/FindZeropsSignInResponse.md)
- - [FindZeropsUserResponse](docs/FindZeropsUserResponse.md)
+ - [FindVncResponse](docs/FindVncResponse.md)
  - [FirewallAuditResponse](docs/FirewallAuditResponse.md)
  - [FirewallResponse](docs/FirewallResponse.md)
  - [FirewallRuleRequest](docs/FirewallRuleRequest.md)
  - [FirewallRuleResponse](docs/FirewallRuleResponse.md)
  - [FirewallingUpgradeRequest](docs/FirewallingUpgradeRequest.md)
  - [GenerateClientSecretResponse](docs/GenerateClientSecretResponse.md)
+ - [HandleAddress](docs/HandleAddress.md)
+ - [HandleAuditResponse](docs/HandleAuditResponse.md)
+ - [HandleAuditResponseData](docs/HandleAuditResponseData.md)
+ - [HandleBirthInfo](docs/HandleBirthInfo.md)
+ - [HandleCreateRequest](docs/HandleCreateRequest.md)
+ - [HandleCreateResponse](docs/HandleCreateResponse.md)
+ - [HandleFindResponse](docs/HandleFindResponse.md)
+ - [HandleListResponse](docs/HandleListResponse.md)
+ - [HandlePatchRequest](docs/HandlePatchRequest.md)
+ - [HandlePatchResponse](docs/HandlePatchResponse.md)
+ - [HandlePhone](docs/HandlePhone.md)
+ - [HandleResponse](docs/HandleResponse.md)
  - [ImageAuditResponse](docs/ImageAuditResponse.md)
  - [ImageAuditResponseData](docs/ImageAuditResponseData.md)
  - [ImageResponse](docs/ImageResponse.md)
  - [InstanceAssignmentSelfLinks](docs/InstanceAssignmentSelfLinks.md)
  - [InstanceAssignmentSelfLinks1](docs/InstanceAssignmentSelfLinks1.md)
  - [InstanceDetails](docs/InstanceDetails.md)
+ - [InstanceProduct](docs/InstanceProduct.md)
+ - [InstanceRegionChangeResponse](docs/InstanceRegionChangeResponse.md)
+ - [InstanceRescueActionResponse](docs/InstanceRescueActionResponse.md)
+ - [InstanceRescueActionResponseData](docs/InstanceRescueActionResponseData.md)
+ - [InstanceResetPasswordActionResponse](docs/InstanceResetPasswordActionResponse.md)
+ - [InstanceResetPasswordActionResponseData](docs/InstanceResetPasswordActionResponseData.md)
  - [InstanceResponse](docs/InstanceResponse.md)
  - [InstanceRestartActionResponse](docs/InstanceRestartActionResponse.md)
  - [InstanceRestartActionResponseData](docs/InstanceRestartActionResponseData.md)
@@ -506,8 +831,9 @@ Class | Method | HTTP request | Description
  - [InstanceStopActionResponseData](docs/InstanceStopActionResponseData.md)
  - [Instances](docs/Instances.md)
  - [InstancesActionsAuditResponse](docs/InstancesActionsAuditResponse.md)
+ - [InstancesActionsRescueRequest](docs/InstancesActionsRescueRequest.md)
  - [InstancesAuditResponse](docs/InstancesAuditResponse.md)
- - [InvoiceResponse](docs/InvoiceResponse.md)
+ - [InstancesResetPasswordActionsRequest](docs/InstancesResetPasswordActionsRequest.md)
  - [IpConfig](docs/IpConfig.md)
  - [IpConfig1](docs/IpConfig1.md)
  - [IpConfig2](docs/IpConfig2.md)
@@ -516,35 +842,32 @@ Class | Method | HTTP request | Description
  - [IpV42](docs/IpV42.md)
  - [IpV43](docs/IpV43.md)
  - [IpV6](docs/IpV6.md)
- - [LedgerEntryResponse](docs/LedgerEntryResponse.md)
  - [Links](docs/Links.md)
  - [ListApiPermissionResponse](docs/ListApiPermissionResponse.md)
+ - [ListApplicationsResponse](docs/ListApplicationsResponse.md)
  - [ListAssignmentAuditsResponse](docs/ListAssignmentAuditsResponse.md)
  - [ListAssignmentResponse](docs/ListAssignmentResponse.md)
  - [ListCredentialResponse](docs/ListCredentialResponse.md)
  - [ListDataCenterResponse](docs/ListDataCenterResponse.md)
- - [ListDpaAuditResponse](docs/ListDpaAuditResponse.md)
- - [ListDpaResponse](docs/ListDpaResponse.md)
- - [ListDpaServicesResponse](docs/ListDpaServicesResponse.md)
+ - [ListDnsZoneRecordsResponse](docs/ListDnsZoneRecordsResponse.md)
+ - [ListDnsZonesResponse](docs/ListDnsZonesResponse.md)
  - [ListFirewallAuditResponse](docs/ListFirewallAuditResponse.md)
  - [ListFirewallResponse](docs/ListFirewallResponse.md)
  - [ListFirewallResponseData](docs/ListFirewallResponseData.md)
  - [ListImageResponse](docs/ListImageResponse.md)
  - [ListImageResponseData](docs/ListImageResponseData.md)
+ - [ListInstanceProductsResponse](docs/ListInstanceProductsResponse.md)
  - [ListInstancesActionsAuditResponse](docs/ListInstancesActionsAuditResponse.md)
  - [ListInstancesAuditResponse](docs/ListInstancesAuditResponse.md)
  - [ListInstancesResponse](docs/ListInstancesResponse.md)
  - [ListInstancesResponseData](docs/ListInstancesResponseData.md)
- - [ListInvoiceResponse](docs/ListInvoiceResponse.md)
- - [ListLedgerEntriesReponse](docs/ListLedgerEntriesReponse.md)
  - [ListObjectStorageAuditResponse](docs/ListObjectStorageAuditResponse.md)
  - [ListObjectStorageResponse](docs/ListObjectStorageResponse.md)
- - [ListPaymentMethodResponse](docs/ListPaymentMethodResponse.md)
- - [ListPaymentMethodResponse1](docs/ListPaymentMethodResponse1.md)
  - [ListPresetRulesResponse](docs/ListPresetRulesResponse.md)
  - [ListPrivateNetworkAuditResponse](docs/ListPrivateNetworkAuditResponse.md)
  - [ListPrivateNetworkResponse](docs/ListPrivateNetworkResponse.md)
  - [ListPrivateNetworkResponseData](docs/ListPrivateNetworkResponseData.md)
+ - [ListPtrRecordsResponse](docs/ListPtrRecordsResponse.md)
  - [ListRoleAuditResponse](docs/ListRoleAuditResponse.md)
  - [ListRoleResponse](docs/ListRoleResponse.md)
  - [ListSecretAuditResponse](docs/ListSecretAuditResponse.md)
@@ -555,13 +878,17 @@ Class | Method | HTTP request | Description
  - [ListTagResponse](docs/ListTagResponse.md)
  - [ListUserAuditResponse](docs/ListUserAuditResponse.md)
  - [ListUserResponse](docs/ListUserResponse.md)
+ - [ListUserSwitchAccountsResponse](docs/ListUserSwitchAccountsResponse.md)
+ - [ListVipAuditResponse](docs/ListVipAuditResponse.md)
  - [ListVipResponse](docs/ListVipResponse.md)
  - [ListVipResponseData](docs/ListVipResponseData.md)
+ - [MinimumRequirements](docs/MinimumRequirements.md)
+ - [Nameserver](docs/Nameserver.md)
  - [ObjectStorageAuditResponse](docs/ObjectStorageAuditResponse.md)
  - [ObjectStorageResponse](docs/ObjectStorageResponse.md)
  - [ObjectStoragesStatsResponse](docs/ObjectStoragesStatsResponse.md)
  - [ObjectStoragesStatsResponseData](docs/ObjectStoragesStatsResponseData.md)
- - [OtherData](docs/OtherData.md)
+ - [OptimalRequirements](docs/OptimalRequirements.md)
  - [PaginationMeta](docs/PaginationMeta.md)
  - [PatchFirewallRequest](docs/PatchFirewallRequest.md)
  - [PatchFirewallResponse](docs/PatchFirewallResponse.md)
@@ -571,21 +898,35 @@ Class | Method | HTTP request | Description
  - [PatchObjectStorageRequest](docs/PatchObjectStorageRequest.md)
  - [PatchPrivateNetworkRequest](docs/PatchPrivateNetworkRequest.md)
  - [PatchPrivateNetworkResponse](docs/PatchPrivateNetworkResponse.md)
- - [PaymentMethodResponse](docs/PaymentMethodResponse.md)
- - [PaymentMethodResponse1](docs/PaymentMethodResponse1.md)
+ - [PatchVncRequest](docs/PatchVncRequest.md)
  - [PermissionRequest](docs/PermissionRequest.md)
  - [PermissionResponse](docs/PermissionResponse.md)
- - [PersonalData](docs/PersonalData.md)
  - [PresetRulesResponse](docs/PresetRulesResponse.md)
  - [PrivateIpConfig](docs/PrivateIpConfig.md)
  - [PrivateNetworkAuditResponse](docs/PrivateNetworkAuditResponse.md)
  - [PrivateNetworkResponse](docs/PrivateNetworkResponse.md)
- - [ProcessedDataType](docs/ProcessedDataType.md)
+ - [PtrRecordResponse](docs/PtrRecordResponse.md)
  - [PutFirewallRequest](docs/PutFirewallRequest.md)
  - [PutFirewallResponse](docs/PutFirewallResponse.md)
+ - [RecordAuditResponse](docs/RecordAuditResponse.md)
+ - [RecordAuditResponseData](docs/RecordAuditResponseData.md)
+ - [RegionChangeRequest](docs/RegionChangeRequest.md)
+ - [RegionChangeResponseData](docs/RegionChangeResponseData.md)
  - [ReinstallInstanceRequest](docs/ReinstallInstanceRequest.md)
  - [ReinstallInstanceResponse](docs/ReinstallInstanceResponse.md)
  - [ReinstallInstanceResponseData](docs/ReinstallInstanceResponseData.md)
+ - [RemediesAuditListResponse](docs/RemediesAuditListResponse.md)
+ - [RemediesAuditResponse](docs/RemediesAuditResponse.md)
+ - [RemediesCreateRequest](docs/RemediesCreateRequest.md)
+ - [RemediesGetResponse](docs/RemediesGetResponse.md)
+ - [RemediesListResponse](docs/RemediesListResponse.md)
+ - [RemediesReplayRequest](docs/RemediesReplayRequest.md)
+ - [RemedyResponse](docs/RemedyResponse.md)
+ - [RemedyTemplateResponse](docs/RemedyTemplateResponse.md)
+ - [RemedyTemplateSummary](docs/RemedyTemplateSummary.md)
+ - [RemedyTemplatesGetResponse](docs/RemedyTemplatesGetResponse.md)
+ - [RemedyTemplatesListResponse](docs/RemedyTemplatesListResponse.md)
+ - [ReplayResponse](docs/ReplayResponse.md)
  - [ResourcePermissionsResponse](docs/ResourcePermissionsResponse.md)
  - [RoleAuditResponse](docs/RoleAuditResponse.md)
  - [RoleResponse](docs/RoleResponse.md)
@@ -595,20 +936,22 @@ Class | Method | HTTP request | Description
  - [SecretAuditResponse](docs/SecretAuditResponse.md)
  - [SecretResponse](docs/SecretResponse.md)
  - [SelfLinks](docs/SelfLinks.md)
- - [SetDefaultFirewallResponse](docs/SetDefaultFirewallResponse.md)
+ - [SetDefaultHandleResponse](docs/SetDefaultHandleResponse.md)
  - [SnapshotResponse](docs/SnapshotResponse.md)
  - [SnapshotsAuditResponse](docs/SnapshotsAuditResponse.md)
  - [SrcCidr](docs/SrcCidr.md)
+ - [SsoTokenResponse](docs/SsoTokenResponse.md)
+ - [SupportSignatureResponse](docs/SupportSignatureResponse.md)
  - [TagAssignmentSelfLinks](docs/TagAssignmentSelfLinks.md)
  - [TagAuditResponse](docs/TagAuditResponse.md)
  - [TagResponse](docs/TagResponse.md)
- - [TagResponse1](docs/TagResponse1.md)
  - [UnassignInstanceFirewallResponse](docs/UnassignInstanceFirewallResponse.md)
  - [UnassignInstancePrivateNetworkResponse](docs/UnassignInstancePrivateNetworkResponse.md)
- - [UnassignVipResponse](docs/UnassignVipResponse.md)
  - [UpdateCustomImageRequest](docs/UpdateCustomImageRequest.md)
  - [UpdateCustomImageResponse](docs/UpdateCustomImageResponse.md)
  - [UpdateCustomImageResponseData](docs/UpdateCustomImageResponseData.md)
+ - [UpdateDnsZoneRecordRequest](docs/UpdateDnsZoneRecordRequest.md)
+ - [UpdatePtrRecordRequest](docs/UpdatePtrRecordRequest.md)
  - [UpdateRoleRequest](docs/UpdateRoleRequest.md)
  - [UpdateRoleResponse](docs/UpdateRoleResponse.md)
  - [UpdateSecretRequest](docs/UpdateSecretRequest.md)
@@ -620,6 +963,9 @@ Class | Method | HTTP request | Description
  - [UpdateUserRequest](docs/UpdateUserRequest.md)
  - [UpdateUserResponse](docs/UpdateUserResponse.md)
  - [UpgradeAutoScalingType](docs/UpgradeAutoScalingType.md)
+ - [UpgradeInstanceProductData](docs/UpgradeInstanceProductData.md)
+ - [UpgradeInstanceProductRequest](docs/UpgradeInstanceProductRequest.md)
+ - [UpgradeInstanceProductResponse](docs/UpgradeInstanceProductResponse.md)
  - [UpgradeInstanceRequest](docs/UpgradeInstanceRequest.md)
  - [UpgradeObjectStorageRequest](docs/UpgradeObjectStorageRequest.md)
  - [UpgradeObjectStorageResponse](docs/UpgradeObjectStorageResponse.md)
@@ -627,9 +973,17 @@ Class | Method | HTTP request | Description
  - [UserAuditResponse](docs/UserAuditResponse.md)
  - [UserIsPasswordSetResponse](docs/UserIsPasswordSetResponse.md)
  - [UserResponse](docs/UserResponse.md)
+ - [UserSwitchAccount](docs/UserSwitchAccount.md)
+ - [UserSwitchAccountDefaultRequest](docs/UserSwitchAccountDefaultRequest.md)
+ - [UserSwitchAccountDefaultResponse](docs/UserSwitchAccountDefaultResponse.md)
+ - [UserSwitchAccountRequest](docs/UserSwitchAccountRequest.md)
+ - [UserSwitchAccountResponse](docs/UserSwitchAccountResponse.md)
+ - [UserSwitchAccountTokens](docs/UserSwitchAccountTokens.md)
+ - [VipAuditResponse](docs/VipAuditResponse.md)
  - [VipResponse](docs/VipResponse.md)
- - [ZeropsSignInResponse](docs/ZeropsSignInResponse.md)
- - [ZeropsUserResponse](docs/ZeropsUserResponse.md)
+ - [VncResponse](docs/VncResponse.md)
+ - [ZoneAuditResponse](docs/ZoneAuditResponse.md)
+ - [ZoneAuditResponseData](docs/ZoneAuditResponseData.md)
 
 
 ## Documentation For Authorization
