@@ -3,9 +3,6 @@ run:
   timeout: 20m
 linters:
   default: none
-  # Carried over from the pre-v2 config. deadcode/structcheck/varcheck were folded
-  # into unused, golint into revive, and megacheck into staticcheck; interfacer was
-  # dropped upstream with no successor.
   enable:
     - errcheck
     - goconst
