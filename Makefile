@@ -94,7 +94,7 @@ clean::
 	rm -rf sdk/{dotnet,nodejs,go,python}
 
 install_plugins::
-	[ -x $(shell which pulumi) ] || curl -fsSL https://get.pulumi.com | sh
+	@command -v pulumi >/dev/null 2>&1 || curl -fsSL https://get.pulumi.com | sh
 
 install_dotnet_sdk::
 	mkdir -p $(WORKING_DIR)/nuget
