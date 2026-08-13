@@ -1,4 +1,4 @@
-module github.com/lbialy/pulumi-contabo/sdk
+module github.com/lbialy/pulumi-contabo/sdk/v2
 
 go 1.25.11
 

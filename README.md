@@ -39,7 +39,7 @@ pip install pulumi_contabo
 ### Go
 
 ```bash
-go get github.com/lbialy/pulumi-contabo/sdk/go/...
+go get github.com/lbialy/pulumi-contabo/sdk/v2/go/...
 ```
 
 ### .NET

@@ -74,8 +74,18 @@ build_dotnet:: install_plugins tfgen # build the dotnet sdk
 		echo "${DOTNET_VERSION}" >version.txt && \
 		dotnet build /p:Version=${DOTNET_VERSION}
 
+# The Go SDK's module path carries the major version, and tfgen derives that segment from
+# VERSION. Building from an untagged checkout yields a 0.x version and therefore a module
+# path with no major suffix, which silently disagrees with sdk/go.mod.
+SDK_GO_MODULE = $(shell head -1 sdk/go.mod | cut -d' ' -f2)
+
 build_go:: install_plugins tfgen # build the go sdk
 	$(WORKING_DIR)/bin/$(TFGEN) go --out sdk/go/
+	@grep -q '"$(SDK_GO_MODULE)/go/contabo/internal"' sdk/go/contabo/tag.go || { \
+		echo "error: generated Go SDK imports do not match $(SDK_GO_MODULE) in sdk/go.mod."; \
+		echo "       VERSION is '$(VERSION)'; tag the repo or pass VERSION=<major>.y.z."; \
+		exit 1; \
+	}
 	cd sdk && go build ./...
 
 lint_provider:: provider # lint the provider code

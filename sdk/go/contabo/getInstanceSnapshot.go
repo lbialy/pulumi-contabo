@@ -7,7 +7,7 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/lbialy/pulumi-contabo/sdk/go/contabo/internal"
+	"github.com/lbialy/pulumi-contabo/sdk/v2/go/contabo/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -18,7 +18,7 @@ import (
 //
 // import (
 //
-//	"github.com/lbialy/pulumi-contabo/sdk/go/contabo"
+//	"github.com/lbialy/pulumi-contabo/sdk/v2/go/contabo"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 //
 // )

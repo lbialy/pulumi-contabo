@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-## HEAD (Unreleased)
+## 2.0.0 (Unreleased)
 
 ### Upgrades
 
@@ -32,6 +32,10 @@ CHANGELOG
 - Package identity moved out of Pulumi-owned namespaces: the Go module is
   `github.com/lbialy/pulumi-contabo`, the npm package is `@lbialy/contabo` and the NuGet
   package is `Lbialy.Contabo`.
+- The Go SDK module is now `github.com/lbialy/pulumi-contabo/sdk/v2`, per the Go module
+  major version rule. Import paths gain a `/v2` segment:
+  `github.com/lbialy/pulumi-contabo/sdk/v2/go/contabo`. The npm, PyPI and NuGet packages
+  carry the major in their version number only and need no rename.
 - The upstream `CNTB_*` environment variables are now the primary source of credentials.
   The `CONTABO_*` names from v1 remain supported as a fallback.
 
