@@ -20,10 +20,15 @@ env:
   PYPI_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
   PYPI_REPOSITORY_URL: ""
   PUBLISH_PYPI: false
+permissions:
+  contents: read
 jobs:
   publish_binary:
     name: publish
     runs-on: ubuntu-latest
+    permissions:
+      # goreleaser creates the GitHub release and uploads the provider binaries to it.
+      contents: write
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v7
